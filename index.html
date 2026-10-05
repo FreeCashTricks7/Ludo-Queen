@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Telegram Mini App</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #f4f4f9);
+            color: var(--tg-theme-text-color, #333);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        /* लूडो बोर्ड ग्रिड */
+        .board {
+            width: 300px;
+            height: 300px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            background-color: #333;
+            border: 4px solid #333;
+            border-radius: 8px;
+        }
+
+        .zone {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .red { background-color: #e74c3c; }
+        .green { background-color: #2ecc71; }
+        .yellow { background-color: #f1c40f; }
+        .blue { background-color: #3498db; }
+        .center { background-color: #ecf0f1; color: #333; font-size: 12px; text-align: center; }
+        .path { background-color: #fff; color: #333; font-size: 12px; }
+
+        /* पासा (Dice) और बटन Controls */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dice-box {
+            font-size: 40px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:active {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 id="user-greeting">लूडो गेम</h2>
+
+    <div class="board">
+        <div class="zone red">लाल (Red)</div>
+        <div class="zone path">मार्ग</div>
+        <div class="zone green">हरा (Green)</div>
+        <div class="zone path">मार्ग</div>
+        <div class="zone center">HOME</div>
+        <div class="zone path">मार्ग</div>
+        <div class="zone blue">नीला (Blue)</div>
+        <div class="zone path">मार्ग</div>
+        <div class="zone yellow">पीला (Yellow)</div>
+    </div>
+
+    <div class="controls">
+        <div class="dice-box" id="dice">🎲</div>
+        <button id="roll-btn" onclick="rollDice()">पासा फेंकें (Roll)</button>
+    </div>
+
+    <script>
+        // Telegram WebApp Initialization
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // स्क्रीन को फुल करने के लिए
+
+        // टेलीग्राम यूजर का नाम सेट करना
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('user-greeting').innerText = `खिलाड़ी: ${tg.initDataUnsafe.user.first_name}`;
+        }
+
+        // पासा फेंकने का लॉजिक
+        const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+        
+        function rollDice() {
+            const diceElement = document.getElementById('dice');
+            const btn = document.getElementById('roll-btn');
+            
+            btn.disabled = true;
+            
+            // डाइस रोलिंग एनीमेशन
+            let count = 0;
+            const interval = setInterval(() => {
+                const randomTemp = Math.floor(Math.random() * 6);
+                diceElement.innerText = diceFaces[randomTemp];
+                count++;
+                if (count > 10) {
+                    clearInterval(interval);
+                    const finalValue = Math.floor(Math.random() * 6) + 1;
+                    diceElement.innerText = diceFaces[finalValue - 1];
+                    btn.disabled = false;
+                    
+                    // टेलीग्राम में डेटा भेजने या हैप्टिक फीडबैक देने के लिए
+                    if (tg.HapticFeedback) {
+                        tg.HapticFeedback.impactOccurred('medium');
+                    }
+                }
+            }, 50);
+        }
+    </script>
+</body>
+</html>
