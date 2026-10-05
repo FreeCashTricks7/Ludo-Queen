@@ -17,7 +17,7 @@
         #game-screen { display: none; flex-direction: column; align-items: center; gap: 8px; width: 100%; max-width: 380px; position: relative; }
 
         /* Board Container */
-        .board-wrapper { position: relative; width: 345px; height: 345px; margin: 45px 0; }
+        .board-wrapper { position: relative; width: 345px; height: 345px; margin: 55px 0; }
         
         .ludo-board {
             width: 100%; height: 100%; display: grid;
@@ -55,30 +55,30 @@
 
         @keyframes pulse { from { transform: scale(1.2); } to { transform: scale(1.5); } }
 
-        /* Dynamic Dice Controller with Glow Animation */
+        /* Dynamic Controller with Glow Animation */
         .dice-container {
             position: absolute; display: flex; align-items: center; gap: 8px;
             background: rgba(30, 30, 30, 0.95); padding: 6px 12px; border-radius: 20px;
-            border: 2px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 20; transition: all 0.4s ease;
+            border: 2px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 20; transition: all 0.3s ease;
         }
-
-        /* Glow Effect for Turn Alert */
-        .dice-glow {
-            animation: turnGlow 0.8s infinite alternate ease-in-out;
-        }
-
-        @keyframes turnGlow {
-            from { box-shadow: 0 0 5px #fff, 0 0 10px currentColor; transform: scale(1); }
-            to { box-shadow: 0 0 20px #fff, 0 0 25px currentColor; transform: scale(1.1); }
-        }
-
+        
         .dice-btn { width: 42px; height: 42px; background: #fff; color: #111; font-size: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
         
-        /* Controller Positions */
-        .pos-r { top: -50px; left: 0; color: #e74c3c; }
-        .pos-g { top: -50px; right: 0; color: #2ecc71; }
-        .pos-y { bottom: -50px; right: 0; color: #f1c40f; }
-        .pos-b { bottom: -50px; left: 0; color: #3498db; }
+        /* Turn Glow Effect */
+        .turn-glow {
+            animation: turnGlowAnim 0.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes turnGlowAnim {
+            from { box-shadow: 0 0 5px #fff, 0 0 10px var(--turn-color); }
+            to { box-shadow: 0 0 15px #fff, 0 0 25px var(--turn-color); }
+        }
+
+        /* Positions for Player Controls */
+        .pos-r { top: -50px; left: 0; --turn-color: #e74c3c; }
+        .pos-g { top: -50px; right: 0; --turn-color: #2ecc71; }
+        .pos-y { bottom: -50px; right: 0; --turn-color: #f1c40f; }
+        .pos-b { bottom: -50px; left: 0; --turn-color: #3498db; }
     </style>
 </head>
 <body>
@@ -92,8 +92,8 @@
     <div id="game-screen">
         <div class="board-wrapper">
             <!-- Dynamic Dice Controller -->
-            <div id="player-controller" class="dice-container pos-r dice-glow">
-                <span id="turn-label" style="font-weight:bold; font-size:14px;">Red</span>
+            <div id="player-controller" class="dice-container pos-r">
+                <span id="turn-label" style="font-weight:bold; font-size:14px; color:#e74c3c;">Red</span>
                 <div class="dice-btn" id="dice" onclick="rollDice()">🎲</div>
             </div>
 
@@ -108,7 +108,7 @@
                     <div class="spot" id="hs-g-0"></div><div class="spot" id="hs-g-1"></div>
                     <div class="spot" id="hs-g-2"></div><div class="spot" id="hs-g-3"></div>
                 </div></div>
-                <!-- Center -->
+                <!-- Center Home -->
                 <div class="center-home"></div>
                 <!-- Blue Base -->
                 <div class="base-b"><div class="inner-base">
@@ -127,44 +127,253 @@
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.expand();
+        }
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        function playAudio(freq, dur, type = 'sine') {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = type;
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.frequency.setValueAtTime(freq, audioCtx.बिल्कुल भाई! आपकी बात एकदम सही है। जब किसी भी प्लेयर की बारी (Turn) आएगी, तो डाइस उस प्लेयर के पास शिफ्ट होने के साथ **साउंड (Beep sound)** करेगा और **ग्लो (Glow Animation)** करेगा, ताकि प्लेयर को तुरंत समझ आ जाए कि अब उसकी बारी है।
+        let audioCtx = null;
+        function playSound(type) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
 
-इसके अलावा, गोटी को पूरा घर के अंदर तक (Home) ले जाने के लिए 51 स्टेप्स के बाद **होम पाथ (Home Corridor)** भी पूरी तरह फिक्स कर दिया गया है।
+                if (type === 'turn') {
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.15);
+                } else if (type === 'dice') {
+                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'move') {
+                    osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.1);
+                }
+            } catch (e) {
+                console.log("Audio not supported or blocked", e);
+            }
+        }
 
-नीचे दिया गया कोड अपनी `index.html` में पेस्ट करें:
+        // 52 Main Track Path
+        const mainPath = [
+            [7,2],[7,3],[7,4],[7,5],[7,6],[6,7],[5,7],[4,7],[3,7],[2,7],[1,7],[1,8],[1,9],
+            [2,9],[3,9],[4,9],[5,9],[6,9],[7,10],[7,11],[7,12],[7,13],[7,14],[7,15],[8,15],
+            [9,15],[9,14],[9,13],[9,12],[9,11],[9,10],[10,9],[11,9],[12,9],[13,9],[14,9],
+            [15,9],[15,8],[15,7],[14,7],[13,7],[12,7],[11,7],[10,7],[9,6],[9,5],[9,4],
+            [9,3],[9,2],[9,1],[8,1],[7,1]
+        ];
 
-```html
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Ludo Queen Pro</title>
-    <script src="[https://telegram.org/js/telegram-web-app.js](https://telegram.org/js/telegram-web-app.js)"></script>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; user-select: none; }
-        body { background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+        // Home Corridors for each player
+        const homeCorridors = {
+            r: [[8,2],[8,3],[8,4],[8,5],[8,6]],
+            g: [[2,8],[3,8],[4,8],[5,8],[6,8]],
+            y: [[8,14],[8,13],[8,12],[8,11],[8,10]],
+            b: [[14,8],[13,8],[12,8],[11,8],[10,8]]
+        };
 
-        #menu-screen { display: flex; flex-direction: column; gap: 20px; width: 90%; max-width: 350px; text-align: center; }
-        .title { font-size: 32px; font-weight: bold; color: #f1c40f; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .btn { padding: 15px; font-size: 18px; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; color: white; background: linear-gradient(135deg, #27ae60, #2ecc71); }
-        .btn-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        const starCoords = ["7,2", "3,9", "9,14", "13,7", "3,7", "7,13", "13,9", "9,3"];
+        const gridCells = {};
 
-        #game-screen { display: none; flex-direction: column; align-items: center; gap: 8px; width: 100%; max-width: 380px; position: relative; }
+        function buildGrid() {
+            const board = document.getElementById('board');
+            for (let r = 1; r <= 15; r++) {
+                for (let c = 1; c <= 15; c++) {
+                    if ((r<=6 && c<=6) || (r<=6 && c>=10) || (r>=10 && c<=6) || (r>=10 && c>=10) || (r>=7 && r<=9 && c>=7 && c<=9)) continue;
 
-        /* Board Container */
-        .board-wrapper { position: relative; width: 345px; height: 345px; margin: 55px 0; }
-        
-        .ludo-board {
-            width: 100%; height: 100%; display: grid;
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.style.gridRow = r;
+                    cell.style.gridColumn = c;
+
+                    // Colored Paths
+                    if (r === 8 && c >= 2 && c <= 6) cell.classList.add('path-r');
+                    if (c === 8 && r >= 2 && r <= 6) cell.classList.add('path-g');
+                    if (r === 8 && c >= 10 && c <= 14) cell.classList.add('path-y');
+                    if (c === 8 && r >= 10 && r <= 14) cell.classList.add('path-b');
+                    if (r === 7 && c === 2) cell.classList.add('path-r');
+                    if (r === 2 && c === 9) cell.classList.add('path-g');
+                    if (r === 9 && c === 14) cell.classList.add('path-y');
+                    if (r === 14 && c === 7) cell.classList.add('path-b');
+
+                    if (starCoords.includes(`${r},${c}`)) cell.classList.add('star');
+
+                    board.appendChild(cell);
+                    gridCells[`${r},${c}`] = cell;
+                }
+            }
+        }
+        buildGrid();
+
+        const startOffsets = { r: 0, g: 13, y: 26, b: 39 };
+        const playerNames = { r: 'Red', g: 'Green', y: 'Yellow', b: 'Blue' };
+        const playerColors = { r: '#e74c3c', g: '#2ecc71', y: '#f1c40f', b: '#3498db' };
+        const posClasses = { r: 'pos-r', g: 'pos-g', y: 'pos-y', b: 'pos-b' };
+
+        let activePlayers = ['r', 'y'];
+        let turnIdx = 0;
+        let diceValue = 0;
+        let hasRolled = false;
+
+        const pawns = {
+            r: [-1, -1, -1, -1],
+            g: [-1, -1, -1, -1],
+            y: [-1, -1, -1, -1],
+            b: [-1, -1, -1, -1]
+        };
+
+        function startGame(mode) {
+            activePlayers = (mode === 2) ? ['r', 'y'] : ['r', 'g', 'y', 'b'];
+            document.getElementById('menu-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'flex';
+            renderPawns();
+            updateTurnUI();
+        }
+
+        function updateTurnUI() {
+            const p = activePlayers[turnIdx];
+            const controller = document.getElementById('player-controller');
+            
+            // Apply Position & Turn Glow Animation
+            controller.className = `dice-container ${posClasses[p]} turn-glow`;
+
+            const label = document.getElementById('turn-label');
+            label.innerText = playerNames[p];
+            label.style.color = playerColors[p];
+
+            document.getElementById('dice').innerText = '🎲';
+            hasRolled = false;
+
+            // Turn sound notification
+            playSound('turn');
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.notificationOccurred('warning');
+            }
+        }
+
+        function rollDice() {
+            if (hasRolled) return;
+            playSound('dice');
+
+            let count = 0;
+            const diceEl = document.getElementById('dice');
+            const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+
+            const interval = setInterval(() => {
+                diceEl.innerText = faces[Math.floor(Math.random() * 6)];
+                count++;
+                if (count > 6) {
+                    clearInterval(interval);
+                    diceValue = Math.floor(Math.random() * 6) + 1;
+                    diceEl.innerText = faces[diceValue - 1];
+                    hasRolled = true;
+                    
+                    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                        window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+                    }
+
+                    const curP = activePlayers[turnIdx];
+                    const canMove = pawns[curP].some(pos => (pos === -1 && diceValue === 6) || (pos >= 0 && pos + diceValue <= 56));
+                    
+                    if (!canMove) {
+                        setTimeout(nextTurn, 800);
+                    } else {
+                        highlightPawns(curP);
+                    }
+                }
+            }, 50);
+        }
+
+        function highlightPawns(color) {
+            for (let i = 0; i < 4; i++) {
+                const pos = pawns[color][i];
+                const el = document.getElementById(`pawn-${color}-${i}`);
+                if (el && ((pos === -1 && diceValue === 6) || (pos >= 0 && pos + diceValue <= 56))) {
+                    el.classList.add('pawn-active');
+                }
+            }
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.pawn').forEach(el => el.classList.remove('pawn-active'));
+        }
+
+        function handlePawnClick(color, idx) {
+            const curP = activePlayers[turnIdx];
+            if (color !== curP || !hasRolled) return;
+
+            const pos = pawns[color][idx];
+
+            if (pos === -1 && diceValue === 6) {
+                pawns[color][idx] = 0; // Open at starting star
+                playSound('move');
+                clearHighlights();
+                renderPawns();
+                hasRolled = false; // Bonus turn on 6
+                return;
+            }
+
+            if (pos >= 0 && pos + diceValue <= 56) {
+                pawns[color][idx] += diceValue;
+                playSound('move');
+                clearHighlights();
+                renderPawns();
+
+                if (diceValue === 6) {
+                    hasRolled = false;
+                } else {
+                    nextTurn();
+                }
+            }
+        }
+
+        function nextTurn() {
+            clearHighlights();
+            turnIdx = (turnIdx + 1) % activePlayers.length;
+            updateTurnUI();
+        }
+
+        function renderPawns() {
+            document.querySelectorAll('.pawn').forEach(el => el.remove());
+
+            ['r', 'g', 'y', 'b'].forEach(color => {
+                pawns[color].forEach((pos, i) => {
+                    const pEl = document.createElement('div');
+                    pEl.className = `pawn pawn-${color}`;
+                    pEl.id = `pawn-${color}-${i}`;
+                    pEl.onclick = () => handlePawnClick(color, i);
+
+                    if (pos === -1) {
+                        const spot = document.getElementById(`hs-${color}-${i}`);
+                        if (spot) spot.appendChild(pEl);
+                    } else if (pos < 51) {
+                        // Main Outer Track
+                        const pathIdx = (pos + startOffsets[color]) % 52;
+                        const [r, c] = mainPath[pathIdx];
+                        const cell = gridCells[`${r},${c}`];
+                        if (cell) cell.appendChild(pEl);
+                    } else if (pos < 56) {
+                        // Home Corridor Track
+                        const corridorIdx = pos - 51;
+                        const [r, c] = homeCorridors[color][corridorIdx];
+                        const cell = gridCells[`${r},${c}`];
+                        if (cell) cell.appendChild(pEl);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
