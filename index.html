@@ -2,981 +2,1037 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Royal Arena Gaming</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Royal Arena — Gaming Demo</title>
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-:root {
-    --bg: #080b13;
-    --card: #131a29;
-    --gold: #ffd166;
-    --green: #00e6a0;
-    --muted: #9ba8bc;
-    --border: rgba(255,255,255,.09);
-}
-
-body {
-    background: var(--bg);
-    color: white;
-    min-height: 100vh;
-    padding-bottom: 85px;
-}
-
-header {
-    padding: 18px 16px;
-    background: #101625;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.logo {
-    font-size: 19px;
-    font-weight: 900;
-    color: var(--gold);
-}
-
-.logo small {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-top: 4px;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg,#ffd166,#ff8c42);
-    color: #111;
-    display: grid;
-    place-items: center;
-    font-weight: 900;
-}
-
-.container {
-    max-width: 650px;
-    padding: 16px;
-    margin: auto;
-}
-
-.page {
-    display: none;
-}
-
-.page.active {
-    display: block;
-    animation: appear .25s ease;
-}
-
-@keyframes appear {
-    from {opacity: 0; transform: translateY(8px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
-.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 18px;
-    margin-bottom: 15px;
-}
-
-.section-title {
-    font-size: 17px;
-    font-weight: 800;
-    margin-bottom: 15px;
-}
-
-.hero {
-    background: linear-gradient(135deg,#3b2c13,#171728 65%,#102c2a);
-    border: 1px solid rgba(255,209,102,.3);
-    border-radius: 22px;
-    padding: 24px 18px;
-    margin-bottom: 16px;
-}
-
-.hero h1 {
-    color: var(--gold);
-    font-size: 25px;
-    margin-bottom: 10px;
-}
-
-.hero p {
-    font-size: 13px;
-    line-height: 1.6;
-    color: #d0d8e5;
-}
-
-.badge {
-    display: inline-block;
-    background: rgba(0,230,160,.12);
-    color: var(--green);
-    border: 1px solid rgba(0,230,160,.2);
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    margin-bottom: 12px;
-}
-
-.balance-card {
-    background: linear-gradient(135deg,#1c302d,#14221f);
-    border: 1px solid rgba(0,230,160,.25);
-}
-
-.balance-label {
-    color: var(--muted);
-    font-size: 12px;
-}
-
-.balance {
-    color: var(--green);
-    font-size: 32px;
-    font-weight: 900;
-    margin: 10px 0 18px;
-}
-
-.row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-button {
-    cursor: pointer;
-    border: none;
-}
-
-.btn {
-    border-radius: 12px;
-    padding: 13px 12px;
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.btn-gold {
-    background: linear-gradient(135deg,#ffe08a,#ffb52e);
-    color: #17130a;
-}
-
-.btn-green {
-    background: linear-gradient(135deg,#00e6a0,#00b982);
-    color: #04140e;
-}
-
-.btn-dark {
-    background: #202a3d;
-    color: white;
-    border: 1px solid var(--border);
-}
-
-.btn:active {
-    transform: scale(.98);
-}
-
-.games {
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 12px;
-}
-
-.game {
-    background: linear-gradient(145deg,#192338,#111725);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 16px 10px;
-    text-align: center;
-}
-
-.game-icon {
-    font-size: 42px;
-    margin-bottom: 12px;
-}
-
-.game h3 {
-    font-size: 15px;
-    margin-bottom: 7px;
-}
-
-.game p {
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.5;
-    min-height: 32px;
-}
-
-.game button {
-    width: 100%;
-    margin-top: 13px;
-}
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.stat {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    padding: 15px;
-}
-
-.stat p {
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.stat h3 {
-    margin-top: 9px;
-    color: var(--gold);
-    font-size: 20px;
-}
-
-input, select {
-    width: 100%;
-    background: #0b101b;
-    color: white;
-    border: 1px solid #303b50;
-    padding: 14px;
-    border-radius: 12px;
-    margin: 8px 0 14px;
-    outline: none;
-}
-
-label {
-    color: #c3ccda;
-    font-size: 12px;
-}
-
-.notice {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.7;
-    margin-top: 12px;
-}
-
-.history-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    border-bottom: 1px solid var(--border);
-    padding: 14px 0;
-    font-size: 13px;
-}
-
-.history-item:last-child {
-    border-bottom: none;
-}
-
-.history-item small {
-    display: block;
-    margin-top: 5px;
-    color: var(--muted);
-}
-
-.status {
-    font-size: 11px;
-    color: var(--gold);
-}
-
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #101625;
-    border-top: 1px solid var(--border);
-    display: grid;
-    grid-template-columns: repeat(5,1fr);
-    padding: 10px 4px calc(10px + env(safe-area-inset-bottom));
-    z-index: 20;
-}
-
-.nav-item {
-    background: transparent;
-    color: var(--muted);
-    font-size: 10px;
-    text-align: center;
-    padding: 6px 0;
-}
-
-.nav-item span {
-    display: block;
-    font-size: 19px;
-    margin-bottom: 5px;
-}
-
-.nav-item.active {
-    color: var(--gold);
-}
-
-.game-board {
-    background: #172a25;
-    border: 2px solid #345448;
-    border-radius: 18px;
-    padding: 18px;
-    text-align: center;
-}
-
-.dice {
-    font-size: 70px;
-    margin: 20px 0;
-}
-
-.result {
-    color: var(--gold);
-    font-weight: 800;
-    margin: 15px 0;
-    min-height: 22px;
-}
-
-.empty {
-    text-align: center;
-    color: var(--muted);
-    padding: 25px 5px;
-    font-size: 13px;
-}
-
-footer {
-    color: #64748b;
-    text-align: center;
-    font-size: 10px;
-    padding: 18px;
-}
-
-@media(max-width:360px) {
-    .logo {font-size: 16px;}
-    .hero h1 {font-size: 22px;}
-    .game-icon {font-size: 35px;}
-}
+:root{--bg:#080c15;--panel:#121b2b;--panel2:#182438;--gold:#ffd166;--green:#00dda0;--muted:#9ba9bd;--line:#29364b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f7f9fc;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;padding-bottom:82px}
+button{font:inherit;cursor:pointer;border:0}
+header{position:sticky;top:0;z-index:5;background:#101726;border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:20px;font-weight:900;color:var(--gold)}
+.brand small{display:block;font-size:10px;letter-spacing:2px;color:var(--muted)}
+.pill{font-size:11px;padding:6px 10px;border-radius:20px;background:#073e33;color:var(--green);border:1px solid #126651}
+.wrap{max-width:720px;margin:auto;padding:15px}
+.page{display:none}
+.page.active{display:block}
+.hero,.panel{border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#172338,#101725);padding:17px;margin-bottom:14px}
+.hero{background:linear-gradient(130deg,#392d14,#182033 60%,#10332d);border-color:#665225}
+.hero h1{color:var(--gold);margin:8px 0}
+.muted{color:var(--muted);font-size:13px;line-height:1.55}
+.balance{font-size:30px;font-weight:900;color:var(--green);margin:7px 0 15px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.game-card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px 12px;text-align:center}
+.game-card .emoji{font-size:42px}
+.game-card h3{margin:7px 0}
+.btn{padding:12px 14px;border-radius:12px;font-weight:800;background:linear-gradient(135deg,#ffe18b,#ffb51b);color:#241b05}
+.btn.green{background:linear-gradient(135deg,#00e5a0,#00a977);color:#06170f}
+.btn.dark{background:#202c40;color:#fff;border:1px solid var(--line)}
+.btn.full{width:100%;margin-top:9px}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:#101726;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
+.nav button{background:none;color:var(--muted);font-size:11px;padding:4px}
+.nav button b{display:block;font-size:20px;margin-bottom:3px}
+.nav button.active{color:var(--gold)}
+.section-title{font-size:18px;font-weight:850;margin:4px 0 13px}
+.game-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.canvas-wrap{background:#0d1522;border:1px solid var(--line);border-radius:18px;padding:8px;overflow:hidden}
+canvas{display:block;width:100%;height:auto;touch-action:none;border-radius:12px}
+.controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.stat{background:#0c1320;border:1px solid var(--line);padding:10px 12px;border-radius:12px;font-size:13px}
+.notice{font-size:11px;color:var(--muted);line-height:1.55;margin-top:12px}
+.dice-face{font-size:54px;min-width:68px;text-align:center}
+.history-row{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.history-row:last-child{border:0}
+.input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:#0a111e;color:white;margin:7px 0 12px}
+.colors{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.color-btn{padding:14px 5px;border-radius:12px;color:white;font-weight:850;border:2px solid transparent}
+.red{background:#e6384f}
+.greenbg{background:#08a875}
+.violet{background:#883de3}
+.color-btn.selected{border-color:#fff;box-shadow:0 0 0 2px var(--gold)}
+.nums{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}
+.num-btn{padding:12px 4px;border-radius:10px;background:#202c40;color:white;font-weight:800;border:2px solid transparent}
+.num-btn.selected{border-color:var(--gold)}
+.result-box{text-align:center;background:#0a111e;border:1px solid var(--line);border-radius:15px;padding:15px;margin-top:12px}
+.big-result{font-size:32px;font-weight:900;margin:4px}
+.small{font-size:11px;color:var(--muted)}
+.ludo-info{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px}
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%);background:#202c40;border:1px solid #4a5a73;padding:11px 16px;border-radius:12px;z-index:20;display:none;max-width:90%;font-size:13px}
+.empty{text-align:center;padding:20px;color:var(--muted);font-size:13px}
+@media(max-width:380px){.brand{font-size:17px}.wrap{padding:11px}.panel,.hero{padding:13px}.game-card .emoji{font-size:35px}}
 </style>
 </head>
-
 <body>
 
 <header>
-    <div class="logo">
-        ROYAL ARENA
-        <small>GAMING PLATFORM</small>
-    </div>
-    <div class="avatar" id="header-avatar">U</div>
+  <div class="brand">ROYAL ARENA<small>GAMING PLATFORM</small></div>
+  <span class="pill">PRACTICE MODE</span>
 </header>
 
-<main class="container">
+<div class="toast" id="toast"></div>
 
-    <!-- HOME -->
-    <section class="page active" id="home">
+<main class="wrap">
 
-        <div class="hero">
-            <span class="badge">🎮 GAMING ZONE</span>
-            <h1>Play Your Game.</h1>
-            <p>अपना पसंदीदा गेम चुनें, अपनी स्किल बेहतर बनाएँ और अपने गेम रिकॉर्ड को ट्रैक करें।</p>
-        </div>
+<section class="page active" id="home">
+  <div class="hero">
+    <span class="pill">🎮 DEMO BUILD</span>
+    <h1>Play. Practice. Improve.</h1>
+    <p class="muted">Ludo, Carrom और Color Prediction के अभ्यास गेम खेलें। यहाँ केवल डेमो पॉइंट्स इस्तेमाल होते हैं।</p>
+  </div>
 
-        <div class="card balance-card">
-            <div class="row">
-                <span class="balance-label">वॉलेट बैलेंस</span>
-                <span class="badge">DEMO MODE</span>
-            </div>
-            <div class="balance" id="home-balance">₹0.00</div>
-            <div class="actions">
-                <button class="btn btn-green" onclick="showPage('wallet')">
-                    ＋ वॉलेट
-                </button>
-                <button class="btn btn-dark" onclick="showPage('history')">
-                    ↗ हिस्ट्री
-                </button>
-            </div>
-        </div>
+  <div class="panel">
+    <div class="muted">Demo points balance</div>
+    <div class="balance" id="balance">1,000 pts</div>
+    <div class="row">
+      <button class="btn green" onclick="dailyPoints()">+ 100 Practice Points</button>
+      <button class="btn dark" onclick="go('history')">History ↗</button>
+    </div>
+    <p class="notice">डेमो पॉइंट्स की कोई वास्तविक नकद कीमत नहीं है।</p>
+  </div>
 
-        <div class="section-title">🔥 लोकप्रिय गेम</div>
+  <div class="section-title">🎮 Games</div>
+  <div class="grid">
+    <div class="game-card">
+      <div class="emoji">🎲</div>
+      <h3>Ludo</h3>
+      <p class="muted">बोर्ड, मोहरे, पासा और बॉट की बारी</p>
+      <button class="btn full" onclick="go('ludo')">Play Ludo</button>
+    </div>
 
-        <div class="games">
-            <div class="game">
-                <div class="game-icon">🎲</div>
-                <h3>Ludo Challenge</h3>
-                <p>डेमो पासा गेम और स्कोर ट्रैकिंग</p>
-                <button class="btn btn-gold" onclick="openGame('dice')">
-                    PLAY NOW
-                </button>
-            </div>
+    <div class="game-card">
+      <div class="emoji">🪙</div>
+      <h3>Carrom</h3>
+      <p class="muted">स्ट्राइकर, निशाना और गोटियों की टक्कर</p>
+      <button class="btn full" onclick="go('carrom')">Play Carrom</button>
+    </div>
 
-            <div class="game">
-                <div class="game-icon">🪙</div>
-                <h3>Carrom Arena</h3>
-                <p>कैरम गेम का शुरुआती इंटरफेस</p>
-                <button class="btn btn-gold" onclick="openGame('carrom')">
-                    PLAY NOW
-                </button>
-            </div>
+    <div class="game-card">
+      <div class="emoji">🎯</div>
+      <h3>Color Prediction</h3>
+      <p class="muted">राउंड, रंग, 0–9 नंबर और परिणाम</p>
+      <button class="btn full" onclick="go('color')">Play Color</button>
+    </div>
 
-            <div class="game">
-                <div class="game-icon">🎯</div>
-                <h3>Number Challenge</h3>
-                <p>नंबर पहचानने का डेमो चैलेंज</p>
-                <button class="btn btn-gold" onclick="openGame('number')">
-                    PLAY NOW
-                </button>
-            </div>
+    <div class="game-card">
+      <div class="emoji">📊</div>
+      <h3>Game History</h3>
+      <p class="muted">अपने अभ्यास राउंड देखें</p>
+      <button class="btn dark full" onclick="go('history')">View History</button>
+    </div>
+  </div>
+</section>
 
-            <div class="game">
-                <div class="game-icon">🏆</div>
-                <h3>My Game Records</h3>
-                <p>अपने गेम रिकॉर्ड और परिणाम देखें</p>
-                <button class="btn btn-dark" onclick="showPage('history')">
-                    VIEW RECORDS
-                </button>
-            </div>
-        </div>
+<section class="page" id="ludo">
+  <div class="game-head">
+    <div>
+      <div class="section-title">🎲 Ludo Challenge</div>
+      <div class="muted">आप: लाल · बॉट: हरा</div>
+    </div>
+    <button class="btn dark" onclick="go('home')">← वापस</button>
+  </div>
 
-        <p class="notice">
-            यह शुरुआती डेमो है। यहाँ वास्तविक पैसे जमा नहीं होते और न ही वास्तविक भुगतान किया जाता है।
-        </p>
-    </section>
+  <div class="canvas-wrap">
+    <canvas id="ludoCanvas" width="600" height="600"></canvas>
+  </div>
 
-    <!-- WALLET -->
-    <section class="page" id="wallet">
-        <div class="section-title">💰 My Wallet</div>
+  <div class="panel">
+    <div class="row">
+      <div>
+        <div class="muted">पासा</div>
+        <div class="dice-face" id="diceFace">⚀</div>
+      </div>
+      <div>
+        <div class="muted">बारी</div>
+        <strong id="ludoTurn">आपकी बारी</strong>
+        <div class="small" id="ludoStatus">पासा फेंकें। 6 आने पर मोहरा बाहर आएगा।</div>
+      </div>
+    </div>
 
-        <div class="card balance-card">
-            <div class="balance-label">वर्तमान डेमो बैलेंस</div>
-            <div class="balance" id="wallet-balance">₹0.00</div>
-            <p class="notice">
-                वास्तविक डिपॉजिट और विड्रॉवल के लिए सुरक्षित सर्वर और पेमेंट गेटवे जोड़ना होगा।
-            </p>
-        </div>
+    <div class="controls">
+      <button class="btn" onclick="rollLudo()">🎲 पासा फेंकें</button>
+      <button class="btn dark" onclick="resetLudo()">नया गेम</button>
+    </div>
 
-        <div class="card">
-            <div class="section-title">Deposit Request</div>
+    <div class="ludo-info">
+      <span class="stat">आपके कदम: <b id="youSteps">0</b>/57</span>
+      <span class="stat">बॉट के कदम: <b id="botSteps">0</b>/57</span>
+    </div>
 
-            <label for="deposit-amount">रकम चुनें (डेमो)</label>
-            <select id="deposit-amount">
-                <option value="10">₹10</option>
-                <option value="50">₹50</option>
-                <option value="100">₹100</option>
-            </select>
+    <p class="notice">यह सरल अभ्यास संस्करण है। इसमें प्रत्येक पक्ष का एक मोहरा है; यह पूरा चार-मोहरों वाला पारंपरिक Ludo नहीं है।</p>
+  </div>
+</section>
 
-            <button class="btn btn-green" style="width:100%"
-                    onclick="demoTransaction('deposit')">
-                DEMO DEPOSIT
-            </button>
+<section class="page" id="carrom">
+  <div class="game-head">
+    <div>
+      <div class="section-title">🪙 Carrom Arena</div>
+      <div class="muted">स्ट्राइकर को खींचकर निशाना लगाएँ</div>
+    </div>
+    <button class="btn dark" onclick="go('home')">← वापस</button>
+  </div>
 
-            <p class="notice">
-                यह केवल इंटरफेस टेस्ट करने के लिए है। इससे कोई वास्तविक भुगतान नहीं होता।
-            </p>
-        </div>
+  <div class="canvas-wrap">
+    <canvas id="carromCanvas" width="600" height="600"></canvas>
+  </div>
 
-        <div class="card">
-            <div class="section-title">Withdrawal Request</div>
+  <div class="panel">
+    <div class="row">
+      <span class="stat">आपकी गोटियाँ: <b id="carromScore">0</b></span>
+      <span class="stat">शॉट: <b id="shotCount">0</b></span>
+    </div>
 
-            <label for="withdraw-amount">निकासी की रकम</label>
-            <input id="withdraw-amount" type="number" min="1"
-                   placeholder="रकम दर्ज करें">
+    <p class="muted" style="margin-top:10px">स्ट्राइकर पर टच या माउस से पीछे खींचें और छोड़ें। खींचने की दिशा के उलट गोटी चलेगी।</p>
 
-            <label for="upi-id">UPI ID (डेमो)</label>
-            <input id="upi-id" type="text"
-                   placeholder="example@upi">
+    <div class="controls">
+      <button class="btn" onclick="resetCarrom()">रैक रीसेट</button>
+      <button class="btn dark" onclick="carromBotShot()">बॉट शॉट</button>
+    </div>
+  </div>
+</section>
 
-            <button class="btn btn-gold" style="width:100%"
-                    onclick="demoTransaction('withdraw')">
-                DEMO WITHDRAWAL
-            </button>
-        </div>
-    </section>
+<section class="page" id="color">
+  <div class="game-head">
+    <div>
+      <div class="section-title">🎯 Color Prediction</div>
+      <div class="muted">डेमो पॉइंट्स · कोई नकद दाँव नहीं</div>
+    </div>
+    <button class="btn dark" onclick="go('home')">← वापस</button>
+  </div>
 
-    <!-- HISTORY -->
-    <section class="page" id="history">
-        <div class="section-title">📜 Transaction History</div>
+  <div class="panel">
+    <div class="row">
+      <div>
+        <div class="muted">राउंड नंबर</div>
+        <strong id="roundNo">1001</strong>
+      </div>
+      <div style="text-align:right">
+        <div class="muted">राउंड समाप्त होने में</div>
+        <strong id="timer">15s</strong>
+      </div>
+    </div>
 
-        <div class="stats">
-            <div class="stat">
-                <p>कुल डेमो डिपॉजिट</p>
-                <h3 id="total-deposits">₹0</h3>
-            </div>
-            <div class="stat">
-                <p>कुल डेमो विड्रॉवल</p>
-                <h3 id="total-withdrawals">₹0</h3>
-            </div>
-        </div>
+    <div class="result-box">
+      <div class="small">पिछला परिणाम</div>
+      <div class="big-result" id="lastResult">—</div>
+      <div class="small" id="lastLabel">अभी कोई परिणाम नहीं</div>
+    </div>
+  </div>
 
-        <div class="card">
-            <div class="row" style="margin-bottom:14px">
-                <div class="section-title" style="margin:0">
-                    सभी ट्रांजैक्शन
-                </div>
-                <select id="history-filter"
-                        style="width:125px;margin:0"
-                        onchange="renderHistory()">
-                    <option value="all">सभी</option>
-                    <option value="deposit">Deposit</option>
-                    <option value="withdraw">Withdraw</option>
-                    <option value="game">Games</option>
-                </select>
-            </div>
+  <div class="panel">
+    <div class="section-title">1. रंग चुनें</div>
 
-            <div id="history-list">
-                <div class="empty">अभी कोई ट्रांजैक्शन नहीं है।</div>
-            </div>
-        </div>
-    </section>
+    <div class="colors">
+      <button class="color-btn greenbg" onclick="selectColor('Green',this)">🟢 GREEN</button>
+      <button class="color-btn violet" onclick="selectColor('Violet',this)">🟣 VIOLET</button>
+      <button class="color-btn red" onclick="selectColor('Red',this)">🔴 RED</button>
+    </div>
 
-    <!-- PROFILE -->
-    <section class="page" id="profile">
-        <div class="section-title">👤 My Profile</div>
+    <div class="section-title" style="margin-top:18px">2. या नंबर चुनें</div>
+    <div class="nums" id="numberButtons"></div>
 
-        <div class="card">
-            <div class="avatar" style="margin-bottom:15px">U</div>
+    <label class="muted" for="stake">डेमो पॉइंट्स (10–100)</label>
+    <input class="input" id="stake" type="number" min="10" max="100" step="10" value="10">
 
-            <label for="profile-name">आपका नाम</label>
-            <input id="profile-name" type="text"
-                   placeholder="अपना नाम लिखें">
+    <button class="btn green full" onclick="placeColorPick()">चुनाव लॉक करें</button>
+    <div class="muted" id="pickStatus" style="margin-top:10px">अगले राउंड के लिए रंग या नंबर चुनें।</div>
 
-            <label for="profile-email">ईमेल</label>
-            <input id="profile-email" type="email"
-                   placeholder="you@example.com">
+    <p class="notice">हर राउंड का परिणाम रैंडम चुना जाता है। जीत की गारंटी नहीं है। यह केवल डेमो पॉइंट्स वाला अभ्यास है।</p>
+  </div>
 
-            <button class="btn btn-gold" style="width:100%"
-                    onclick="saveProfile()">
-                SAVE DEMO PROFILE
-            </button>
+  <div class="panel">
+    <div class="section-title">हाल के परिणाम</div>
+    <div id="colorHistory" class="empty">अभी परिणाम नहीं हैं।</div>
+  </div>
+</section>
 
-            <p class="notice">
-                अभी यह लोकल डेमो प्रोफाइल है। वास्तविक ईमेल साइनअप और सुरक्षित लॉगिन अगले चरण में जोड़े जाएँगे।
-            </p>
-        </div>
-
-        <div class="card">
-            <div class="section-title">Account Information</div>
-            <div class="history-item">
-                <span>Account Type</span>
-                <span class="status">DEMO</span>
-            </div>
-            <div class="history-item">
-                <span>Payment Status</span>
-                <span class="status">NOT CONNECTED</span>
-            </div>
-            <div class="history-item">
-                <span>Game Mode</span>
-                <span class="status">PRACTICE</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- GAME -->
-    <section class="page" id="game">
-        <div class="row" style="margin-bottom:15px">
-            <div class="section-title" id="game-title">🎲 Game</div>
-            <button class="btn btn-dark"
-                    onclick="showPage('home')">← वापस</button>
-        </div>
-
-        <div class="game-board">
-            <span class="badge">PRACTICE MODE</span>
-            <div class="dice" id="game-icon">🎲</div>
-            <h3 id="game-subtitle">Practice Game</h3>
-            <div class="result" id="game-result">
-                खेलने के लिए बटन दबाएँ।
-            </div>
-
-            <button class="btn btn-gold"
-                    id="play-button"
-                    style="width:100%"
-                    onclick="playDemoGame()">
-                PLAY ROUND
-            </button>
-
-            <p class="notice">
-                यह अभ्यास के लिए बनाया गया डेमो है। इसमें कोई वास्तविक दाँव, जीत या भुगतान नहीं है।
-            </p>
-        </div>
-
-        <div class="card" style="margin-top:15px">
-            <div class="section-title">Game Information</div>
-            <div class="history-item">
-                <span>Mode</span>
-                <span class="status">PRACTICE</span>
-            </div>
-            <div class="history-item">
-                <span>Real Money</span>
-                <span class="status">DISABLED</span>
-            </div>
-        </div>
-    </section>
+<section class="page" id="history">
+  <div class="section-title">📜 Game History</div>
+  <div class="panel">
+    <div id="historyList" class="empty">अभी कोई रिकॉर्ड नहीं है।</div>
+    <button class="btn dark full" onclick="clearHistory()">डेमो हिस्ट्री साफ करें</button>
+  </div>
+</section>
 
 </main>
 
-<nav class="bottom-nav">
-    <button class="nav-item active" data-page="home"
-            onclick="showPage('home')">
-        <span>⌂</span>Home
-    </button>
-    <button class="nav-item" data-page="wallet"
-            onclick="showPage('wallet')">
-        <span>◈</span>Wallet
-    </button>
-    <button class="nav-item" data-page="history"
-            onclick="showPage('history')">
-        <span>▤</span>History
-    </button>
-    <button class="nav-item" data-page="profile"
-            onclick="showPage('profile')">
-        <span>♙</span>Profile
-    </button>
-    <button class="nav-item" data-page="games"
-            onclick="showPage('games')">
-        <span>🎮</span>Games
-    </button>
+<nav class="nav">
+  <button class="active" data-page="home" onclick="go('home')"><b>⌂</b>Home</button>
+  <button data-page="ludo" onclick="go('ludo')"><b>🎲</b>Ludo</button>
+  <button data-page="carrom" onclick="go('carrom')"><b>🪙</b>Carrom</button>
+  <button data-page="color" onclick="go('color')"><b>🎯</b>Color</button>
 </nav>
 
-<footer>
-    ROYAL ARENA · DEMO BUILD
-</footer>
-
 <script>
-const STORAGE_KEY = "royal_arena_demo_v1";
+const $=id=>document.getElementById(id);
 
-let state = {
-    balance: 0,
-    totalDeposits: 0,
-    totalWithdrawals: 0,
-    history: [],
-    profile: {
-        name: "",
-        email: ""
-    }
-};
+let points=1000;
+let records=[];
+let dailyUsed=false;
 
-let currentGame = "dice";
-
-function loadState() {
-    try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            const parsed = JSON.parse(saved);
-
-            if (parsed && typeof parsed === "object") {
-                state = {
-                    ...state,
-                    ...parsed,
-                    profile: {
-                        ...state.profile,
-                        ...(parsed.profile || {})
-                    },
-                    history: Array.isArray(parsed.history)
-                        ? parsed.history
-                        : []
-                };
-            }
-        }
-    } catch (error) {
-        console.warn("Demo data could not be loaded.");
-    }
-
-    updateUI();
+function toast(msg){
+  const t=$('toast');
+  t.textContent=msg;
+  t.style.display='block';
+  clearTimeout(toast.timer);
+  toast.timer=setTimeout(()=>t.style.display='none',2300);
 }
 
-function saveState() {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (error) {
-        alert("डेमो डेटा सेव नहीं हो पाया।");
+function save(){
+  try{
+    localStorage.setItem('royalArenaPractice',JSON.stringify({points,records,dailyUsed}));
+  }catch(e){}
+}
+
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem('royalArenaPractice'));
+    if(d){
+      points=Number.isFinite(d.points)?d.points:1000;
+      records=Array.isArray(d.records)?d.records:[];
+      dailyUsed=!!d.dailyUsed;
     }
+  }catch(e){}
+  updateBalance();
+  renderHistory();
 }
 
-function money(amount) {
-    return "₹" + Number(amount || 0).toFixed(2);
+function updateBalance(){
+  $('balance').textContent=points.toLocaleString()+' pts';
 }
 
-function showPage(page) {
-    if (page === "games") page = "home";
+function dailyPoints(){
+  if(dailyUsed){
+    toast('आज के practice points पहले ही ले चुके हैं।');
+    return;
+  }
+  points+=100;
+  dailyUsed=true;
+  updateBalance();
+  save();
+  toast('+100 demo points मिल गए।');
+}
 
-    document.querySelectorAll(".page").forEach(section => {
-        section.classList.remove("active");
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='ludo')drawLudo();
+  if(id==='carrom')drawCarrom();
+}
+
+function record(type,detail,delta=0){
+  records.unshift({
+    type,
+    detail,
+    delta,
+    date:new Date().toLocaleString('hi-IN')
+  });
+  if(records.length>100)records.length=100;
+  save();
+  renderHistory();
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+function renderHistory(){
+  const el=$('historyList');
+
+  if(!records.length){
+    el.innerHTML='अभी कोई रिकॉर्ड नहीं है।';
+    el.className='empty';
+    return;
+  }
+
+  el.className='';
+  el.innerHTML=records.map(r=>`
+    <div class="history-row">
+      <div>
+        <b>${esc(r.type)}</b>
+        <div class="small">${esc(r.detail)} · ${esc(r.date)}</div>
+      </div>
+      <b>${r.delta>0?'+':''}${r.delta} pts</b>
+    </div>
+  `).join('');
+}
+
+function clearHistory(){
+  records=[];
+  save();
+  renderHistory();
+  toast('हिस्ट्री साफ हो गई।');
+}
+
+/* LUDO PRACTICE GAME */
+
+const lc=$('ludoCanvas').getContext('2d');
+let you=0;
+let bot=0;
+let turn='you';
+let ludoBusy=false;
+
+const track=[];
+
+for(let c=6;c<=8;c++)track.push([c,0]);
+for(let r=1;r<=5;r++)track.push([8,r]);
+for(let c=9;c<=14;c++)track.push([c,6]);
+for(let r=7;r<=8;r++)track.push([14,r]);
+for(let c=13;c>=9;c--)track.push([c,8]);
+for(let r=9;r<=14;r++)track.push([8,r]);
+for(let c=7;c>=6;c--)track.push([c,14]);
+for(let r=13;r>=9;r--)track.push([6,r]);
+for(let c=5;c>=0;c--)track.push([c,8]);
+for(let r=7;r>=6;r--)track.push([0,r]);
+for(let c=1;c<=5;c++)track.push([c,6]);
+for(let r=5;r>=1;r--)track.push([6,r]);
+
+function drawLudo(){
+  const c=lc;
+  const cell=40;
+
+  c.clearRect(0,0,600,600);
+  c.fillStyle='#f0eadb';
+  c.fillRect(0,0,600,600);
+
+  const zones=[
+    {x:0,y:0,col:'#d94350'},
+    {x:360,y:0,col:'#20a66b'},
+    {x:0,y:360,col:'#3978d5'},
+    {x:360,y:360,col:'#e9bd32'}
+  ];
+
+  zones.forEach(z=>{
+    c.fillStyle=z.col;
+    c.fillRect(z.x,z.y,240,240);
+    c.fillStyle='#fff4df';
+    c.fillRect(z.x+40,z.y+40,160,160);
+    c.fillStyle=z.col;
+
+    [[80,80],[160,80],[80,160],[160,160]].forEach(p=>{
+      c.beginPath();
+      c.arc(z.x+p[0],z.y+p[1],18,0,Math.PI*2);
+      c.fill();
     });
+  });
 
-    const selected = document.getElementById(page);
+  c.strokeStyle='#a99f8a';
+  c.lineWidth=1;
 
-    if (!selected) return;
+  track.forEach(([x,y],i)=>{
+    c.fillStyle=(i%6===0)?'#fff1bf':'#fffdf7';
+    c.fillRect(x*cell,y*cell,cell,cell);
+    c.strokeRect(x*cell,y*cell,cell,cell);
+  });
 
-    selected.classList.add("active");
+  for(let i=1;i<=5;i++){
+    c.fillStyle='#e86b70';
+    c.fillRect(6*cell,i*cell,cell,cell);
 
-    document.querySelectorAll(".nav-item").forEach(button => {
-        button.classList.toggle(
-            "active",
-            button.dataset.page === page
-        );
-    });
+    c.fillStyle='#52bf8b';
+    c.fillRect(8*cell,i*cell,cell,cell);
 
-    if (page === "wallet") updateUI();
-    if (page === "history") renderHistory();
+    c.fillStyle='#6598e8';
+    c.fillRect(i*cell,8*cell,cell,cell);
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
-}
+    c.fillStyle='#f0d15b';
+    c.fillRect((14-i)*cell,6*cell,cell,cell);
+  }
 
-function updateUI() {
-    document.getElementById("home-balance").textContent =
-        money(state.balance);
+  c.beginPath();
+  c.moveTo(240,240);
+  c.lineTo(360,240);
+  c.lineTo(300,300);
+  c.closePath();
+  c.fillStyle='#d94350';
+  c.fill();
 
-    document.getElementById("wallet-balance").textContent =
-        money(state.balance);
+  c.beginPath();
+  c.moveTo(360,240);
+  c.lineTo(360,360);
+  c.lineTo(300,300);
+  c.fillStyle='#20a66b';
+  c.fill();
 
-    document.getElementById("total-deposits").textContent =
-        money(state.totalDeposits);
+  c.beginPath();
+  c.moveTo(360,360);
+  c.lineTo(240,360);
+  c.lineTo(300,300);
+  c.fillStyle='#e9bd32';
+  c.fill();
 
-    document.getElementById("total-withdrawals").textContent =
-        money(state.totalWithdrawals);
+  c.beginPath();
+  c.moveTo(240,360);
+  c.lineTo(240,240);
+  c.lineTo(300,300);
+  c.fillStyle='#3978d5';
+  c.fill();
 
-    const name = state.profile.name.trim();
+  function pawn(step,color,start){
+    let x,y;
 
-    document.getElementById("header-avatar").textContent =
-        name ? name.charAt(0).toUpperCase() : "U";
-
-    document.getElementById("profile-name").value =
-        state.profile.name;
-
-    document.getElementById("profile-email").value =
-        state.profile.email;
-}
-
-function demoTransaction(type) {
-    let amount = 0;
-
-    if (type === "deposit") {
-        amount = Number(
-            document.getElementById("deposit-amount").value
-        );
-
-        if (!Number.isFinite(amount) || amount <= 0) {
-            alert("सही रकम चुनें।");
-            return;
-        }
-
-        state.balance += amount;
-        state.totalDeposits += amount;
-
-    } else if (type === "withdraw") {
-        amount = Number(
-            document.getElementById("withdraw-amount").value
-        );
-
-        const upi = document.getElementById("upi-id").value.trim();
-
-        if (!Number.isFinite(amount) || amount <= 0) {
-            alert("निकासी की सही रकम दर्ज करें।");
-            return;
-        }
-
-        if (!/^[\w.-]+@[\w.-]+$/.test(upi)) {
-            alert("डेमो के लिए सही फॉर्मेट में UPI ID लिखें।");
-            return;
-        }
-
-        if (amount > state.balance) {
-            alert("डेमो बैलेंस पर्याप्त नहीं है।");
-            return;
-        }
-
-        state.balance -= amount;
-        state.totalWithdrawals += amount;
-    } else {
-        return;
+    if(step===0){
+      x=start[0];
+      y=start[1];
+    }else if(step>=57){
+      x=300;
+      y=300;
+    }else{
+      const p=track[(step-1)%track.length];
+      x=p[0]*cell+cell/2;
+      y=p[1]*cell+cell/2;
     }
 
-    state.history.unshift({
-        id: "DEMO-" + Date.now(),
-        type,
-        amount,
-        status: "DEMO ONLY",
-        date: new Date().toLocaleString("hi-IN")
-    });
+    c.beginPath();
+    c.arc(x,y,14,0,Math.PI*2);
+    c.fillStyle=color;
+    c.fill();
+    c.strokeStyle='#fff';
+    c.lineWidth=3;
+    c.stroke();
 
-    saveState();
-    updateUI();
-    renderHistory();
+    c.fillStyle='#111';
+    c.font='bold 13px sans-serif';
+    c.textAlign='center';
+    c.textBaseline='middle';
+    c.fillText(step===0?'●':String(step),x,y);
+  }
 
-    document.getElementById("withdraw-amount").value = "";
+  pawn(you,'#e32636',[120,120]);
+  pawn(bot,'#078b59',[480,120]);
 
-    alert(
-        type === "deposit"
-            ? "डेमो डिपॉजिट दर्ज हो गया। कोई वास्तविक भुगतान नहीं हुआ।"
-            : "डेमो निकासी दर्ज हो गई। कोई वास्तविक पैसा नहीं भेजा गया।"
-    );
+  c.fillStyle='#162234';
+  c.font='bold 16px sans-serif';
+  c.textAlign='center';
+  c.fillText('YOU',120,215);
+  c.fillText('BOT',480,215);
+
+  $('youSteps').textContent=you;
+  $('botSteps').textContent=bot;
 }
 
-function renderHistory() {
-    const container = document.getElementById("history-list");
-    const filter = document.getElementById("history-filter").value;
+function rollLudo(){
+  if(turn!=='you'||ludoBusy)return;
 
-    const items = state.history.filter(item => {
-        return filter === "all" || item.type === filter;
+  const r=1+Math.floor(Math.random()*6);
+  $('diceFace').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][r-1];
+
+  if(you===0&&r!==6){
+    $('ludoStatus').textContent='6 आने पर ही मोहरा बाहर निकलेगा।';
+    turn='bot';
+    $('ludoTurn').textContent='बॉट की बारी';
+    ludoBusy=true;
+    setTimeout(botTurn,900);
+    return;
+  }
+
+  you=you===0?1:Math.min(57,you+r);
+  $('ludoStatus').textContent=`आपको ${r} आया; आपकी चाल अपडेट हुई।`;
+
+  record('Ludo','आपने '+r+' फेंका',0);
+
+  if(you>=57){
+    $('ludoStatus').textContent='आपने अभ्यास गेम जीत लिया!';
+    record('Ludo','आप जीते',0);
+    turn='done';
+    $('ludoTurn').textContent='आप जीते';
+    drawLudo();
+    return;
+  }
+
+  if(r!==6){
+    turn='bot';
+    $('ludoTurn').textContent='बॉट की बारी';
+    ludoBusy=true;
+    setTimeout(botTurn,900);
+  }
+
+  drawLudo();
+}
+
+function botTurn(){
+  if(turn==='done')return;
+
+  const r=1+Math.floor(Math.random()*6);
+  $('diceFace').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][r-1];
+
+  if(bot===0&&r===6)bot=1;
+  else if(bot>0)bot=Math.min(57,bot+r);
+
+  $('botSteps').textContent=bot;
+  drawLudo();
+
+  if(bot>=57){
+    turn='done';
+    $('ludoTurn').textContent='बॉट जीता';
+    $('ludoStatus').textContent='बॉट ने अभ्यास राउंड जीता।';
+    record('Ludo','बॉट जीता',0);
+    ludoBusy=false;
+    return;
+  }
+
+  turn='you';
+  ludoBusy=false;
+  $('ludoTurn').textContent='आपकी बारी';
+  $('ludoStatus').textContent='पासा फेंकें।';
+}
+
+function resetLudo(){
+  you=0;
+  bot=0;
+  turn='you';
+  ludoBusy=false;
+  $('diceFace').textContent='⚀';
+  $('ludoTurn').textContent='आपकी बारी';
+  $('ludoStatus').textContent='पासा फेंकें। 6 आने पर मोहरा बाहर आएगा।';
+  drawLudo();
+}
+
+/* CARROM PRACTICE GAME */
+
+const cc=$('carromCanvas').getContext('2d');
+let coins=[];
+let striker={x:300,y:500,vx:0,vy:0,r:19};
+let aim=null;
+let shots=0;
+let carromScore=0;
+let anim=null;
+
+function resetCarrom(){
+  coins=[];
+
+  const positions=[
+    [300,300],[278,300],[322,300],
+    [289,281],[311,281],[289,319],
+    [311,319],[267,300],[333,300],
+    [300,278],[300,322]
+  ];
+
+  positions.forEach((p,i)=>{
+    coins.push({
+      x:p[0],y:p[1],vx:0,vy:0,
+      r:i===0?13:11,
+      color:i===0?'#d83b50':i%2?'#f4e6c8':'#222a38',
+      pocketed:false
     });
+  });
 
-    if (items.length === 0) {
-        container.innerHTML =
-            '<div class="empty">इस श्रेणी में कोई रिकॉर्ड नहीं है।</div>';
-        return;
+  striker={x:300,y:500,vx:0,vy:0,r:19};
+  shots=0;
+  carromScore=0;
+
+  $('carromScore').textContent=0;
+  $('shotCount').textContent=0;
+
+  drawCarrom();
+
+  if(anim)cancelAnimationFrame(anim);
+  anim=null;
+}
+
+function drawCarrom(){
+  cc.clearRect(0,0,600,600);
+
+  cc.fillStyle='#b97b43';
+  cc.fillRect(15,15,570,570);
+
+  cc.fillStyle='#e6c18a';
+  cc.fillRect(42,42,516,516);
+
+  cc.strokeStyle='#7e3e24';
+  cc.lineWidth=5;
+  cc.strokeRect(55,55,490,490);
+
+  [[55,55],[545,55],[55,545],[545,545]].forEach(p=>{
+    cc.beginPath();
+    cc.arc(p[0],p[1],23,0,Math.PI*2);
+    cc.fillStyle='#171b24';
+    cc.fill();
+  });
+
+  cc.strokeStyle='#9d5731';
+  cc.lineWidth=2;
+  cc.beginPath();
+  cc.arc(300,300,65,0,Math.PI*2);
+  cc.stroke();
+
+  cc.beginPath();
+  cc.arc(300,300,35,0,Math.PI*2);
+  cc.stroke();
+
+  cc.strokeStyle='#8b4828';
+  cc.lineWidth=3;
+  cc.beginPath();
+  cc.moveTo(95,500);
+  cc.lineTo(505,500);
+  cc.moveTo(95,100);
+  cc.lineTo(505,100);
+  cc.stroke();
+
+  cc.fillStyle='#fff0ce';
+  cc.beginPath();
+  cc.arc(300,500,29,0,Math.PI*2);
+  cc.fill();
+
+  coins.forEach(o=>{
+    if(o.pocketed)return;
+
+    cc.beginPath();
+    cc.arc(o.x,o.y,o.r,0,Math.PI*2);
+    cc.fillStyle=o.color;
+    cc.fill();
+    cc.strokeStyle=o.color==='#222a38'?'#697181':'#fff0c8';
+    cc.lineWidth=2;
+    cc.stroke();
+  });
+
+  cc.beginPath();
+  cc.arc(striker.x,striker.y,striker.r,0,Math.PI*2);
+  cc.fillStyle='#477fe0';
+  cc.fill();
+  cc.strokeStyle='#e6efff';
+  cc.lineWidth=3;
+  cc.stroke();
+
+  if(aim){
+    cc.beginPath();
+    cc.moveTo(striker.x,striker.y);
+    cc.lineTo(aim.x,aim.y);
+    cc.strokeStyle='#e93d4f';
+    cc.lineWidth=3;
+    cc.stroke();
+  }
+}
+
+function pointFromEvent(e){
+  const r=$('carromCanvas').getBoundingClientRect();
+
+  return {
+    x:(e.clientX-r.left)*600/r.width,
+    y:(e.clientY-r.top)*600/r.height
+  };
+}
+
+$('carromCanvas').addEventListener('pointerdown',e=>{
+  const p=pointFromEvent(e);
+
+  if(Math.hypot(p.x-striker.x,p.y-striker.y)<55){
+    aim=p;
+    $('carromCanvas').setPointerCapture(e.pointerId);
+  }
+});
+
+$('carromCanvas').addEventListener('pointermove',e=>{
+  if(aim){
+    aim=pointFromEvent(e);
+    drawCarrom();
+  }
+});
+
+$('carromCanvas').addEventListener('pointerup',e=>{
+  if(!aim)return;
+
+  const p=pointFromEvent(e);
+  const dx=striker.x-p.x;
+  const dy=striker.y-p.y;
+
+  striker.vx=Math.max(-15,Math.min(15,dx*.10));
+  striker.vy=Math.max(-15,Math.min(15,dy*.10));
+
+  aim=null;
+  shots++;
+  $('shotCount').textContent=shots;
+
+  record('Carrom','शॉट '+shots,0);
+
+  if(!anim)animateCarrom();
+});
+
+function animateCarrom(){
+  let moving=false;
+
+  [striker,...coins.filter(o=>!o.pocketed)].forEach(o=>{
+    o.x+=o.vx;
+    o.y+=o.vy;
+
+    o.vx*=.985;
+    o.vy*=.985;
+
+    if(Math.abs(o.vx)+Math.abs(o.vy)>.12)moving=true;
+
+    if(o.x<72+o.r||o.x>528-o.r){
+      o.vx*=-.82;
+      o.x=Math.max(72+o.r,Math.min(528-o.r,o.x));
     }
 
-    container.innerHTML = items.map(item => {
-        const isDeposit = item.type === "deposit";
-        const isWithdraw = item.type === "withdraw";
-
-        const title = isDeposit
-            ? "Demo Deposit"
-            : isWithdraw
-                ? "Demo Withdrawal"
-                : "Practice Game";
-
-        const sign = isDeposit ? "+" : isWithdraw ? "-" : "";
-
-        return `
-            <div class="history-item">
-                <div>
-                    <strong>${title}</strong>
-                    <small>${escapeHTML(item.date)}</small>
-                    <small>${escapeHTML(item.id)}</small>
-                </div>
-                <div style="text-align:right">
-                    <strong>${sign}${money(item.amount)}</strong>
-                    <small class="status">${escapeHTML(item.status)}</small>
-                </div>
-            </div>
-        `;
-    }).join("");
-}
-
-function escapeHTML(value) {
-    return String(value).replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-    })[char]);
-}
-
-function saveProfile() {
-    const name = document.getElementById("profile-name").value.trim();
-    const email = document.getElementById("profile-email").value.trim();
-
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert("ईमेल का फॉर्मेट सही नहीं है।");
-        return;
+    if(o.y<72+o.r||o.y>528-o.r){
+      o.vy*=-.82;
+      o.y=Math.max(72+o.r,Math.min(528-o.r,o.y));
     }
+  });
 
-    state.profile = { name, email };
+  const all=[striker,...coins.filter(o=>!o.pocketed)];
 
-    saveState();
-    updateUI();
+  for(let i=0;i<all.length;i++){
+    for(let j=i+1;j<all.length;j++){
+      const a=all[i],b=all[j];
+      const dx=b.x-a.x,dy=b.y-a.y;
+      const d=Math.hypot(dx,dy)||.01;
+      const min=a.r+b.r;
 
-    alert("डेमो प्रोफाइल सेव हो गई। यह वास्तविक अकाउंट नहीं है।");
-}
+      if(d<min){
+        const nx=dx/d,ny=dy/d;
+        const over=(min-d)/2;
 
-function openGame(game) {
-    currentGame = game;
+        a.x-=nx*over;
+        a.y-=ny*over;
+        b.x+=nx*over;
+        b.y+=ny*over;
 
-    const games = {
-        dice: {
-            title: "🎲 Ludo Dice",
-            subtitle: "पासा अभ्यास",
-            icon: "🎲"
-        },
-        carrom: {
-            title: "🪙 Carrom Arena",
-            subtitle: "कैरम अभ्यास",
-            icon: "🪙"
-        },
-        number: {
-            title: "🎯 Number Challenge",
-            subtitle: "नंबर अभ्यास",
-            icon: "🎯"
+        const rel=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;
+
+        if(rel>0){
+          a.vx-=rel*nx;
+          a.vy-=rel*ny;
+          b.vx+=rel*nx;
+          b.vy+=rel*ny;
         }
+      }
+    }
+  }
+
+  const pockets=[[55,55],[545,55],[55,545],[545,545]];
+
+  coins.forEach(o=>{
+    if(o.pocketed)return;
+
+    if(pockets.some(p=>Math.hypot(o.x-p[0],o.y-p[1])<25)){
+      o.pocketed=true;
+      carromScore++;
+      $('carromScore').textContent=carromScore;
+      record('Carrom','गोटी पॉकेट हुई',0);
+    }
+  });
+
+  if(pockets.some(p=>Math.hypot(striker.x-p[0],striker.y-p[1])<22)){
+    striker.x=300;
+    striker.y=500;
+    striker.vx=striker.vy=0;
+  }
+
+  drawCarrom();
+
+  if(moving)anim=requestAnimationFrame(animateCarrom);
+  else anim=null;
+}
+
+function carromBotShot(){
+  const target=coins.find(o=>!o.pocketed);
+
+  if(!target){
+    toast('सभी गोटियाँ पॉकेट हो गईं; रैक रीसेट करें।');
+    return;
+  }
+
+  striker.x=300;
+  striker.y=100;
+  striker.vx=(target.x-striker.x)*.055;
+  striker.vy=(target.y-striker.y)*.055;
+
+  shots++;
+  $('shotCount').textContent=shots;
+
+  if(!anim)animateCarrom();
+}
+
+resetCarrom();
+
+/* COLOR PREDICTION PRACTICE */
+
+let round=1001;
+let seconds=15;
+let chosenColor='';
+let chosenNumber=null;
+let roundLocked=false;
+let colorResults=[];
+
+function buildNumbers(){
+  const box=$('numberButtons');
+  box.innerHTML='';
+
+  for(let n=0;n<=9;n++){
+    const b=document.createElement('button');
+    b.className='num-btn';
+    b.textContent=n;
+
+    b.onclick=()=>{
+      chosenNumber=n;
+      chosenColor='';
+
+      document.querySelectorAll('.num-btn').forEach(x=>x.classList.remove('selected'));
+      document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('selected'));
+
+      b.classList.add('selected');
+      $('pickStatus').textContent='नंबर '+n+' चुना गया।';
     };
 
-    const selected = games[game] || games.dice;
-
-    document.getElementById("game-title").textContent =
-        selected.title;
-
-    document.getElementById("game-subtitle").textContent =
-        selected.subtitle;
-
-    document.getElementById("game-icon").textContent =
-        selected.icon;
-
-    document.getElementById("game-result").textContent =
-        "खेलने के लिए बटन दबाएँ।";
-
-    document.getElementById("play-button").textContent =
-        "PLAY ROUND";
-
-    showPage("game");
+    box.appendChild(b);
+  }
 }
 
-function playDemoGame() {
-    const result = document.getElementById("game-result");
-    const icon = document.getElementById("game-icon");
+function selectColor(color,el){
+  chosenColor=color;
+  chosenNumber=null;
 
-    if (currentGame === "dice") {
-        const roll = Math.floor(Math.random() * 6) + 1;
+  document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('selected'));
+  document.querySelectorAll('.num-btn').forEach(x=>x.classList.remove('selected'));
 
-        const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+  el.classList.add('selected');
+  $('pickStatus').textContent=color+' चुना गया।';
+}
 
-        icon.textContent = diceFaces[roll - 1];
-        result.textContent = "पासे का परिणाम: " + roll;
+function placeColorPick(){
+  if(roundLocked){
+    toast('इस राउंड का चुनाव पहले ही लॉक है।');
+    return;
+  }
 
-    } else if (currentGame === "carrom") {
-        const shots = [
-            "अभ्यास शॉट: गोटी बाईं तरफ गई।",
-            "अभ्यास शॉट: गोटी पॉकेट के पास रुकी।",
-            "अभ्यास शॉट: गोटी पॉकेट में गई।",
-            "अभ्यास शॉट: शॉट दोबारा आजमाएँ।"
-        ];
+  if(!chosenColor&&chosenNumber===null){
+    toast('पहले रंग या नंबर चुनें।');
+    return;
+  }
 
-        result.textContent =
-            shots[Math.floor(Math.random() * shots.length)];
+  const stake=Number($('stake').value);
 
-    } else {
-        const number = Math.floor(Math.random() * 10) + 1;
+  if(!Number.isInteger(stake)||stake<10||stake>100){
+    toast('10 से 100 पॉइंट्स चुनें।');
+    return;
+  }
 
-        result.textContent =
-            "डेमो नंबर: " + number;
+  if(stake>points){
+    toast('डेमो पॉइंट्स पर्याप्त नहीं हैं।');
+    return;
+  }
+
+  points-=stake;
+  updateBalance();
+  roundLocked=true;
+
+  window.currentPick={
+    color:chosenColor,
+    number:chosenNumber,
+    stake,
+    round
+  };
+
+  $('pickStatus').textContent=
+    `राउंड ${round} के लिए चुनाव लॉक हुआ: ${chosenColor||('नंबर '+chosenNumber)} · ${stake} pts`;
+
+  save();
+  record('Color','राउंड '+round+' चुनाव लॉक',-stake);
+}
+
+function colorFor(n){
+  if(n===0||n===5)return 'Violet';
+  if([1,3,7,9].includes(n))return 'Green';
+  return 'Red';
+}
+
+function endRound(){
+  const n=Math.floor(Math.random()*10);
+  const color=colorFor(n);
+  const pick=window.currentPick;
+
+  if(pick&&pick.round===round){
+    const win=pick.number!==null
+      ?pick.number===n
+      :pick.color===color;
+
+    if(win){
+      const reward=pick.number!==null
+        ?pick.stake*8
+        :pick.color==='Violet'
+          ?pick.stake*4
+          :pick.stake*2;
+
+      points+=reward;
+      updateBalance();
+
+      $('pickStatus').textContent=`डेमो जीत! +${reward} पॉइंट्स`;
+      record('Color','राउंड '+round+' जीत',reward);
+    }else{
+      $('pickStatus').textContent='इस राउंड में चुनाव नहीं मिला। अगला राउंड आजमाएँ।';
+      record('Color','राउंड '+round+' परिणाम: '+color+' '+n,0);
     }
+  }else{
+    $('pickStatus').textContent='राउंड पूरा हुआ। अगले राउंड के लिए चुनें।';
+  }
 
-    state.history.unshift({
-        id: "GAME-" + Date.now(),
-        type: "game",
-        amount: 0,
-        status: "PRACTICE ONLY",
-        date: new Date().toLocaleString("hi-IN")
-    });
+  colorResults.unshift({round,n,color});
+  colorResults=colorResults.slice(0,12);
 
-    saveState();
+  $('lastResult').textContent=n;
+  $('lastResult').style.color=
+    color==='Red'?'#ff5267':
+    color==='Green'?'#00dda0':'#b783ff';
+
+  $('lastLabel').textContent=color+' result';
+
+  $('colorHistory').className='';
+  $('colorHistory').innerHTML=colorResults.map(r=>`
+    <div class="history-row">
+      <div>
+        <b>Round ${r.round}</b>
+        <div class="small">${r.color}</div>
+      </div>
+      <div class="big-result" style="font-size:22px;color:${
+        r.color==='Red'?'#ff5267':
+        r.color==='Green'?'#00dda0':'#b783ff'
+      }">${r.n}</div>
+    </div>
+  `).join('');
+
+  round++;
+  $('roundNo').textContent=round;
+
+  window.currentPick=null;
+  roundLocked=false;
+  chosenColor='';
+  chosenNumber=null;
+
+  document.querySelectorAll('.color-btn,.num-btn').forEach(
+    x=>x.classList.remove('selected')
+  );
+
+  seconds=15;
+  save();
 }
 
-loadState();
-</script>
+function tick(){
+  seconds--;
 
+  if(seconds<=0){
+    endRound();
+    seconds=15;
+  }
+
+  $('timer').textContent=seconds+'s';
+}
+
+buildNumbers();
+$('roundNo').textContent=round;
+$('timer').textContent=seconds+'s';
+
+setInterval(tick,1000);
+load();
+drawLudo();
+</script>
 </body>
 </html>
