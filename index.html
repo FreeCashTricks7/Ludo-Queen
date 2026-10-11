@@ -1,543 +1,982 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yono Lucky Draw - UPI Cash Rewards</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Arena Gaming</title>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; }
-        
-        /* Premium Obsidian & Gold Glow Theme */
-        body { 
-            background: #080c14 linear-gradient(180deg, #0d1322 0%, #050810 100%); 
-            color: #ffffff; 
-            min-height: 100vh; 
-            padding-bottom: 95px; 
-            position: relative; 
-            overflow-x: hidden; 
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-        .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-        .bg-item { position: absolute; top: -10%; font-size: 20px; opacity: 0.2; animation: fall 9s linear infinite; filter: drop-shadow(0 0 8px #ffd700); }
-        @keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
-        .bg-item:nth-child(1) { left: 8%; animation-duration: 7s; }
-        .bg-item:nth-child(2) { left: 32%; animation-duration: 10s; animation-delay: 2s; }
-        .bg-item:nth-child(3) { left: 62%; animation-duration: 8s; animation-delay: 1s; }
-        .bg-item:nth-child(4) { left: 85%; animation-duration: 11s; animation-delay: 3s; }
+:root {
+    --bg: #080b13;
+    --card: #131a29;
+    --gold: #ffd166;
+    --green: #00e6a0;
+    --muted: #9ba8bc;
+    --border: rgba(255,255,255,.09);
+}
 
-        .app-container { position: relative; z-index: 1; padding: 16px; max-width: 480px; margin: 0 auto; }
+body {
+    background: var(--bg);
+    color: white;
+    min-height: 100vh;
+    padding-bottom: 85px;
+}
 
-        /* Modern User Header Card */
-        .user-header-card { 
-            background: rgba(18, 26, 43, 0.8); 
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 215, 0, 0.3); 
-            border-radius: 22px; 
-            padding: 12px 16px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            margin-bottom: 16px; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
-        }
-        .user-info { display: flex; align-items: center; gap: 12px; }
-        .avatar-circle { 
-            width: 42px; 
-            height: 42px; 
-            background: linear-gradient(135deg, #ffd700, #ff8c00); 
-            color: #000; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 18px; 
-            font-weight: 900; 
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5); 
-        }
-        .user-text h3 { font-size: 14px; font-weight: 800; color: #fff; }
-        .user-text p { font-size: 11px; color: #00ffaa; font-weight: 600; }
+header {
+    padding: 18px 16px;
+    background: #101625;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
 
-        .balance-badge { 
-            background: linear-gradient(135deg, #00ffaa, #00b87a); 
-            padding: 8px 14px; 
-            border-radius: 18px; 
-            font-weight: 900; 
-            color: #05100a; 
-            font-size: 13px; 
-            box-shadow: 0 0 15px rgba(0, 255, 170, 0.3); 
-            text-transform: uppercase;
-        }
+.logo {
+    font-size: 19px;
+    font-weight: 900;
+    color: var(--gold);
+}
 
-        /* Modern Dashboard Navigation Buttons */
-        .dashboard-nav {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .nav-btn {
-            background: rgba(18, 26, 43, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 10px 4px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(10px);
-        }
-        .nav-btn.active {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.05));
-            border: 1px solid #ffd700;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-        }
-        .nav-btn i { font-size: 16px; margin-bottom: 6px; color: #64748b; display: block; }
-        .nav-btn.active i { color: #ffd700; }
-        .nav-btn span { font-size: 10px; font-weight: 800; color: #94a3b8; }
-        .nav-btn.active span { color: #ffffff; }
+.logo small {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-top: 4px;
+}
 
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: slideUp 0.35s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#ffd166,#ff8c42);
+    color: #111;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+}
 
-        /* Jackpot Banner Card */
-        .banner-card { 
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(0, 255, 170, 0.05)); 
-            backdrop-filter: blur(15px);
-            border-radius: 20px; 
-            padding: 16px; 
-            color: white; 
-            border: 1px solid rgba(255, 215, 0, 0.4); 
-            margin-bottom: 16px; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4); 
-            text-align: center;
-        }
-        .banner-card h2 { font-size: 16px; font-weight: 800; color: #ffd700; margin-bottom: 6px; letter-spacing: 0.5px; }
-        .banner-card p { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
+.container {
+    max-width: 650px;
+    padding: 16px;
+    margin: auto;
+}
 
-        /* Live Task Progress Line Container */
-        .progress-box {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 12px 14px;
-            margin-bottom: 16px;
-        }
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 11px;
-            font-weight: 800;
-        }
-        .progress-header span:first-child { color: #94a3b8; text-transform: uppercase; }
-        .progress-header span:last-child { color: #00ffaa; }
+.page {
+    display: none;
+}
 
-        .progress-bar-bg {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-        .progress-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #00ffaa, #ffd700);
-            border-radius: 10px;
-            transition: width 0.4s ease-in-out;
-            box-shadow: 0 0 10px rgba(0, 255, 170, 0.6);
-        }
+.page.active {
+    display: block;
+    animation: appear .25s ease;
+}
 
-        .card-box { 
-            background: rgba(18, 26, 43, 0.75); 
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            border-radius: 22px; 
-            padding: 18px; 
-            margin-bottom: 16px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
-        }
-        .card-title { font-size: 12px; font-weight: 900; color: #ffd700; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; letter-spacing: 1px; }
-        .card-title::before { content: ''; width: 4px; height: 14px; background: #00ffaa; border-radius: 2px; box-shadow: 0 0 8px #00ffaa; }
+@keyframes appear {
+    from {opacity: 0; transform: translateY(8px);}
+    to {opacity: 1; transform: translateY(0);}
+}
 
-        /* Channel Item Row */
-        .task-card { 
-            background: rgba(255, 255, 255, 0.02); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            border-radius: 16px; 
-            padding: 12px 14px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            margin-bottom: 10px; 
-        }
-        
-        .channel-info { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 13px; color: #f1f5f9; }
-        
-        .animated-emoji { 
-            font-size: 18px; 
-            display: inline-block;
-            line-height: 1;
-            animation: pulseGlow 1.5s infinite ease-in-out; 
-        }
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 15px;
+}
 
-        @keyframes pulseGlow { 
-            0% { transform: scale(1); } 
-            50% { transform: scale(1.22); } 
-            100% { transform: scale(1); } 
-        }
+.section-title {
+    font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
 
-        /* Buttons */
-        .btn-join { 
-            background: linear-gradient(135deg, #ffd700, #ff8c00); 
-            color: #000; 
-            text-decoration: none; 
-            padding: 8px 18px; 
-            border-radius: 20px; 
-            font-size: 11px; 
-            font-weight: 900; 
-            border: none; 
-            cursor: pointer; 
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3); 
-            transition: 0.2s;
-        }
+.hero {
+    background: linear-gradient(135deg,#3b2c13,#171728 65%,#102c2a);
+    border: 1px solid rgba(255,209,102,.3);
+    border-radius: 22px;
+    padding: 24px 18px;
+    margin-bottom: 16px;
+}
 
-        .btn-join.waiting {
-            background: linear-gradient(135deg, #00ffaa, #00b87a) !important;
-            color: #000 !important;
-            box-shadow: 0 4px 12px rgba(0, 255, 170, 0.4) !important;
-            cursor: wait;
-        }
+.hero h1 {
+    color: var(--gold);
+    font-size: 25px;
+    margin-bottom: 10px;
+}
 
-        .btn-join.joined { 
-            background: rgba(255, 255, 255, 0.05) !important; 
-            color: #64748b !important; 
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: none !important; 
-            pointer-events: none;
-        }
+.hero p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #d0d8e5;
+}
 
-        .btn-action { 
-            width: 100%; 
-            background: linear-gradient(135deg, #00ffaa, #00b87a); 
-            border: none; 
-            padding: 16px; 
-            border-radius: 20px; 
-            font-weight: 900; 
-            font-size: 13px; 
-            color: #05100a; 
-            cursor: pointer; 
-            box-shadow: 0 6px 20px rgba(0, 255, 170, 0.3); 
-            text-transform: uppercase; 
-            margin-top: 10px; 
-            letter-spacing: 0.5px;
-        }
+.badge {
+    display: inline-block;
+    background: rgba(0,230,160,.12);
+    color: var(--green);
+    border: 1px solid rgba(0,230,160,.2);
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    margin-bottom: 12px;
+}
 
-        .custom-input { 
-            width: 100%; 
-            padding: 15px; 
-            border-radius: 16px; 
-            border: 1px solid rgba(255, 215, 0, 0.3); 
-            background: rgba(8, 12, 20, 0.7); 
-            font-size: 14px; 
-            text-align: center; 
-            font-weight: bold; 
-            margin: 12px 0; 
-            color: #ffd700; 
-            outline: none;
-        }
+.balance-card {
+    background: linear-gradient(135deg,#1c302d,#14221f);
+    border: 1px solid rgba(0,230,160,.25);
+}
 
-        .rules-list { font-size: 12px; color: #94a3b8; line-height: 1.8; padding-left: 18px; }
-        .rules-list li { margin-bottom: 6px; }
+.balance-label {
+    color: var(--muted);
+    font-size: 12px;
+}
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-        .grid-card { 
-            background: rgba(18, 26, 43, 0.75); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            padding: 16px; 
-            border-radius: 20px; 
-            text-align: center; 
-        }
-        .grid-card p { font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
-        .grid-card h3 { font-size: 18px; font-weight: 900; color: #ffd700; margin-top: 4px; }
+.balance {
+    color: var(--green);
+    font-size: 32px;
+    font-weight: 900;
+    margin: 10px 0 18px;
+}
 
-        /* Modal Popup */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { 
-            background: linear-gradient(135deg, #0d1322, #050810); 
-            padding: 26px; 
-            border-radius: 28px; 
-            text-align: center; 
-            max-width: 320px; 
-            width: 85%; 
-            border: 1px solid rgba(255, 215, 0, 0.4); 
-            box-shadow: 0 0 35px rgba(0,0,0,0.8); 
-        }
-        .modal-content i { font-size: 50px; color: #ffd700; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)); display: inline-block; }
-        .modal-content h2 { color: #fff; font-size: 18px; font-weight: 900; margin-bottom: 8px; }
-        .modal-content p { color: #94a3b8; font-size: 12px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; }
-        .modal-btn { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; border: none; padding: 12px 30px; border-radius: 20px; font-weight: 900; font-size: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,215,0,0.3); }
-    </style>
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+.btn {
+    border-radius: 12px;
+    padding: 13px 12px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.btn-gold {
+    background: linear-gradient(135deg,#ffe08a,#ffb52e);
+    color: #17130a;
+}
+
+.btn-green {
+    background: linear-gradient(135deg,#00e6a0,#00b982);
+    color: #04140e;
+}
+
+.btn-dark {
+    background: #202a3d;
+    color: white;
+    border: 1px solid var(--border);
+}
+
+.btn:active {
+    transform: scale(.98);
+}
+
+.games {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+}
+
+.game {
+    background: linear-gradient(145deg,#192338,#111725);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 16px 10px;
+    text-align: center;
+}
+
+.game-icon {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.game h3 {
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+
+.game p {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+    min-height: 32px;
+}
+
+.game button {
+    width: 100%;
+    margin-top: 13px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.stat p {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.stat h3 {
+    margin-top: 9px;
+    color: var(--gold);
+    font-size: 20px;
+}
+
+input, select {
+    width: 100%;
+    background: #0b101b;
+    color: white;
+    border: 1px solid #303b50;
+    padding: 14px;
+    border-radius: 12px;
+    margin: 8px 0 14px;
+    outline: none;
+}
+
+label {
+    color: #c3ccda;
+    font-size: 12px;
+}
+
+.notice {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+    margin-top: 12px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    font-size: 13px;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-item small {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+}
+
+.status {
+    font-size: 11px;
+    color: var(--gold);
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #101625;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    padding: 10px 4px calc(10px + env(safe-area-inset-bottom));
+    z-index: 20;
+}
+
+.nav-item {
+    background: transparent;
+    color: var(--muted);
+    font-size: 10px;
+    text-align: center;
+    padding: 6px 0;
+}
+
+.nav-item span {
+    display: block;
+    font-size: 19px;
+    margin-bottom: 5px;
+}
+
+.nav-item.active {
+    color: var(--gold);
+}
+
+.game-board {
+    background: #172a25;
+    border: 2px solid #345448;
+    border-radius: 18px;
+    padding: 18px;
+    text-align: center;
+}
+
+.dice {
+    font-size: 70px;
+    margin: 20px 0;
+}
+
+.result {
+    color: var(--gold);
+    font-weight: 800;
+    margin: 15px 0;
+    min-height: 22px;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 25px 5px;
+    font-size: 13px;
+}
+
+footer {
+    color: #64748b;
+    text-align: center;
+    font-size: 10px;
+    padding: 18px;
+}
+
+@media(max-width:360px) {
+    .logo {font-size: 16px;}
+    .hero h1 {font-size: 22px;}
+    .game-icon {font-size: 35px;}
+}
+</style>
 </head>
+
 <body>
 
-    <div class="bg-animation">
-        <div class="bg-item">🎰</div>
-        <div class="bg-item">💸</div>
-        <div class="bg-item">💰</div>
-        <div class="bg-item">🎁</div>
+<header>
+    <div class="logo">
+        ROYAL ARENA
+        <small>GAMING PLATFORM</small>
     </div>
+    <div class="avatar" id="header-avatar">U</div>
+</header>
 
-    <!-- New User Bonus Modal Popup -->
-    <div class="modal" id="bonusModal">
-        <div class="modal-content">
-            <i class="fa-solid fa-trophy"></i>
-            <h2>Congratulations 🎉</h2>
-            <p>आप Lucky draw में <b>₹100 Cash Prize</b> जीत चुके हैं! Withdraw करने के लिए टास्क पूरा करें।</p>
-            <button class="modal-btn" onclick="closeModal()">CLAIM ₹100 NOW</button>
+<main class="container">
+
+    <!-- HOME -->
+    <section class="page active" id="home">
+
+        <div class="hero">
+            <span class="badge">🎮 GAMING ZONE</span>
+            <h1>Play Your Game.</h1>
+            <p>अपना पसंदीदा गेम चुनें, अपनी स्किल बेहतर बनाएँ और अपने गेम रिकॉर्ड को ट्रैक करें।</p>
         </div>
-    </div>
 
-    <div class="app-container">
-        <!-- User Profile Card -->
-        <div class="user-header-card">
-            <div class="user-info">
-                <div class="avatar-circle" id="avatar-letter">U</div>
-                <div class="user-text">
-                    <h3 id="username">User Name</h3>
-                    <p id="userid">ID: 00000000</p>
+        <div class="card balance-card">
+            <div class="row">
+                <span class="balance-label">वॉलेट बैलेंस</span>
+                <span class="badge">DEMO MODE</span>
+            </div>
+            <div class="balance" id="home-balance">₹0.00</div>
+            <div class="actions">
+                <button class="btn btn-green" onclick="showPage('wallet')">
+                    ＋ वॉलेट
+                </button>
+                <button class="btn btn-dark" onclick="showPage('history')">
+                    ↗ हिस्ट्री
+                </button>
+            </div>
+        </div>
+
+        <div class="section-title">🔥 लोकप्रिय गेम</div>
+
+        <div class="games">
+            <div class="game">
+                <div class="game-icon">🎲</div>
+                <h3>Ludo Challenge</h3>
+                <p>डेमो पासा गेम और स्कोर ट्रैकिंग</p>
+                <button class="btn btn-gold" onclick="openGame('dice')">
+                    PLAY NOW
+                </button>
+            </div>
+
+            <div class="game">
+                <div class="game-icon">🪙</div>
+                <h3>Carrom Arena</h3>
+                <p>कैरम गेम का शुरुआती इंटरफेस</p>
+                <button class="btn btn-gold" onclick="openGame('carrom')">
+                    PLAY NOW
+                </button>
+            </div>
+
+            <div class="game">
+                <div class="game-icon">🎯</div>
+                <h3>Number Challenge</h3>
+                <p>नंबर पहचानने का डेमो चैलेंज</p>
+                <button class="btn btn-gold" onclick="openGame('number')">
+                    PLAY NOW
+                </button>
+            </div>
+
+            <div class="game">
+                <div class="game-icon">🏆</div>
+                <h3>My Game Records</h3>
+                <p>अपने गेम रिकॉर्ड और परिणाम देखें</p>
+                <button class="btn btn-dark" onclick="showPage('history')">
+                    VIEW RECORDS
+                </button>
+            </div>
+        </div>
+
+        <p class="notice">
+            यह शुरुआती डेमो है। यहाँ वास्तविक पैसे जमा नहीं होते और न ही वास्तविक भुगतान किया जाता है।
+        </p>
+    </section>
+
+    <!-- WALLET -->
+    <section class="page" id="wallet">
+        <div class="section-title">💰 My Wallet</div>
+
+        <div class="card balance-card">
+            <div class="balance-label">वर्तमान डेमो बैलेंस</div>
+            <div class="balance" id="wallet-balance">₹0.00</div>
+            <p class="notice">
+                वास्तविक डिपॉजिट और विड्रॉवल के लिए सुरक्षित सर्वर और पेमेंट गेटवे जोड़ना होगा।
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="section-title">Deposit Request</div>
+
+            <label for="deposit-amount">रकम चुनें (डेमो)</label>
+            <select id="deposit-amount">
+                <option value="10">₹10</option>
+                <option value="50">₹50</option>
+                <option value="100">₹100</option>
+            </select>
+
+            <button class="btn btn-green" style="width:100%"
+                    onclick="demoTransaction('deposit')">
+                DEMO DEPOSIT
+            </button>
+
+            <p class="notice">
+                यह केवल इंटरफेस टेस्ट करने के लिए है। इससे कोई वास्तविक भुगतान नहीं होता।
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="section-title">Withdrawal Request</div>
+
+            <label for="withdraw-amount">निकासी की रकम</label>
+            <input id="withdraw-amount" type="number" min="1"
+                   placeholder="रकम दर्ज करें">
+
+            <label for="upi-id">UPI ID (डेमो)</label>
+            <input id="upi-id" type="text"
+                   placeholder="example@upi">
+
+            <button class="btn btn-gold" style="width:100%"
+                    onclick="demoTransaction('withdraw')">
+                DEMO WITHDRAWAL
+            </button>
+        </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="page" id="history">
+        <div class="section-title">📜 Transaction History</div>
+
+        <div class="stats">
+            <div class="stat">
+                <p>कुल डेमो डिपॉजिट</p>
+                <h3 id="total-deposits">₹0</h3>
+            </div>
+            <div class="stat">
+                <p>कुल डेमो विड्रॉवल</p>
+                <h3 id="total-withdrawals">₹0</h3>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="row" style="margin-bottom:14px">
+                <div class="section-title" style="margin:0">
+                    सभी ट्रांजैक्शन
                 </div>
+                <select id="history-filter"
+                        style="width:125px;margin:0"
+                        onchange="renderHistory()">
+                    <option value="all">सभी</option>
+                    <option value="deposit">Deposit</option>
+                    <option value="withdraw">Withdraw</option>
+                    <option value="game">Games</option>
+                </select>
             </div>
-            <div class="balance-badge">
-                Balance: ₹<span id="header-balance">100.00</span>
-            </div>
-        </div>
 
-        <!-- Dashboard Fast Navigation -->
-        <div class="dashboard-nav">
-            <div class="nav-btn active" id="nav-tasks" onclick="switchTab('tasks-tab', this)">
-                <i class="fa-solid fa-list-check"></i>
-                <span>Tasks</span>
-            </div>
-            <div class="nav-btn" id="nav-refer" onclick="switchTab('refer-tab', this)">
-                <i class="fa-solid fa-users"></i>
-                <span>Refer</span>
-            </div>
-            <div class="nav-btn" id="nav-withdraw" onclick="switchTab('withdraw-tab', this)">
-                <i class="fa-solid fa-wallet"></i>
-                <span>Withdraw</span>
-            </div>
-            <div class="nav-btn" id="nav-profile" onclick="switchTab('profile-tab', this)">
-                <i class="fa-solid fa-user"></i>
-                <span>Profile</span>
+            <div id="history-list">
+                <div class="empty">अभी कोई ट्रांजैक्शन नहीं है।</div>
             </div>
         </div>
+    </section>
 
-        <!-- 1. TASKS TAB -->
-        <div id="tasks-tab" class="tab-content active">
-            <div class="banner-card">
-                <h2>🎰 YONO LUCKY DRAW MANDATORY TASKS</h2>
-                <p>नीचे दिए गए सभी Telegram Channels को Join करें और अपना <b>₹100 Winning Prize</b> तुरंत Withdraw करें!</p>
-            </div>
+    <!-- PROFILE -->
+    <section class="page" id="profile">
+        <div class="section-title">👤 My Profile</div>
 
-            <!-- LIVE TASK PROGRESS LINE BOX -->
-            <div class="progress-box">
-                <div class="progress-header">
-                    <span>Task Verification Line</span>
-                    <span id="progress-text">0 / 10 Joined</span>
-                </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="progress-fill"></div>
-                </div>
-            </div>
+        <div class="card">
+            <div class="avatar" style="margin-bottom:15px">U</div>
 
-            <div class="card-box">
-                <div class="card-title">LUCKY DRAW CHANNELS (10/10)</div>
+            <label for="profile-name">आपका नाम</label>
+            <input id="profile-name" type="text"
+                   placeholder="अपना नाम लिखें">
 
-                <!-- 10 Channels List -->
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🎁</span> Channel 1</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 2</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 3</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 4</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 5</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 6</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 7</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 8</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 9</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
-                <div class="task-card"><div class="channel-info"><span class="animated-emoji">🚀</span> Channel 10</div><button class="btn-join" onclick="handleJoinClick(this, 'https://t.me/+kCr0xkaeeEgwNzRl')">JOIN</button></div>
+            <label for="profile-email">ईमेल</label>
+            <input id="profile-email" type="email"
+                   placeholder="you@example.com">
 
-                <button class="btn-action" onclick="verifyTasks()"><i class="fa-solid fa-circle-check"></i> VERIFY TASKS & UNLOCK ₹100</button>
-            </div>
+            <button class="btn btn-gold" style="width:100%"
+                    onclick="saveProfile()">
+                SAVE DEMO PROFILE
+            </button>
+
+            <p class="notice">
+                अभी यह लोकल डेमो प्रोफाइल है। वास्तविक ईमेल साइनअप और सुरक्षित लॉगिन अगले चरण में जोड़े जाएँगे।
+            </p>
         </div>
 
-        <!-- 2. REFER TAB -->
-        <div id="refer-tab" class="tab-content">
-            <div class="card-box">
-                <div class="card-title">YONO REFER & EARN MORE</div>
-                <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">अपने दोस्तों को शेयर करें और हर रेफ़र पर <b>₹20 Extra Cash</b> जीतें!</p>
-                <input type="text" id="refer-link" class="custom-input" readonly value="https://t.me/Bot?start=12345">
-                <button class="btn-action" onclick="copyReferLink()"><i class="fa-solid fa-copy"></i> COPY REFERRAL LINK</button>
+        <div class="card">
+            <div class="section-title">Account Information</div>
+            <div class="history-item">
+                <span>Account Type</span>
+                <span class="status">DEMO</span>
+            </div>
+            <div class="history-item">
+                <span>Payment Status</span>
+                <span class="status">NOT CONNECTED</span>
+            </div>
+            <div class="history-item">
+                <span>Game Mode</span>
+                <span class="status">PRACTICE</span>
             </div>
         </div>
+    </section>
 
-        <!-- 3. WITHDRAW TAB -->
-        <div id="withdraw-tab" class="tab-content">
-            <div class="card-box">
-                <div class="card-title">INSTANT YONO UPI TRANSFER</div>
-                <p style="font-size:12px; color:#94a3b8;">Available Balance: <b style="color:#00ffaa;">₹<span id="withdraw-balance">100.00</span></b></p>
-                <input type="text" id="upi-id" class="custom-input" placeholder="Enter UPI ID (e.g. 9876543210@paytm)">
-                <button class="btn-action" onclick="processWithdraw()"><i class="fa-solid fa-wallet"></i> REQUEST WITHDRAWAL</button>
-            </div>
-
-            <div class="card-box">
-                <div class="card-title">YONO LUCKY DRAW RULES</div>
-                <ul class="rules-list">
-                    <li>Minimum Withdrawal amount <b>₹100</b> है।</li>
-                    <li>सभी चैनल्स ज्वाइन किए बिना Withdraw Approve नहीं होगा।</li>
-                    <li>Lucky Draw Bonus एक Telegram ID पर सिर्फ 1 बार मिलेगा।</li>
-                </ul>
-            </div>
+    <!-- GAME -->
+    <section class="page" id="game">
+        <div class="row" style="margin-bottom:15px">
+            <div class="section-title" id="game-title">🎲 Game</div>
+            <button class="btn btn-dark"
+                    onclick="showPage('home')">← वापस</button>
         </div>
 
-        <!-- 4. PROFILE TAB -->
-        <div id="profile-tab" class="tab-content">
-            <div class="grid-2">
-                <div class="grid-card">
-                    <p>Available Balance</p>
-                    <h3>₹100.00</h3>
-                </div>
-                <div class="grid-card">
-                    <p>TOTAL WITHDRAWAL</p>
-                    <h3 style="color:#ff0078;" id="total-withdrawn">₹0.00</h3>
-                </div>
+        <div class="game-board">
+            <span class="badge">PRACTICE MODE</span>
+            <div class="dice" id="game-icon">🎲</div>
+            <h3 id="game-subtitle">Practice Game</h3>
+            <div class="result" id="game-result">
+                खेलने के लिए बटन दबाएँ।
             </div>
-            
-            <div class="card-box">
-                <div class="card-title">YONO ACCOUNT STATUS</div>
-                <p style="font-size:13px; color:#94a3b8; margin-bottom:8px;"><b>Verification Status:</b> <span style="color:#00ffaa;">ACTIVE</span></p>
-                <p style="font-size:13px; color:#94a3b8;"><b>Lucky Draw Prize:</b> ₹100 Won</p>
+
+            <button class="btn btn-gold"
+                    id="play-button"
+                    style="width:100%"
+                    onclick="playDemoGame()">
+                PLAY ROUND
+            </button>
+
+            <p class="notice">
+                यह अभ्यास के लिए बनाया गया डेमो है। इसमें कोई वास्तविक दाँव, जीत या भुगतान नहीं है।
+            </p>
+        </div>
+
+        <div class="card" style="margin-top:15px">
+            <div class="section-title">Game Information</div>
+            <div class="history-item">
+                <span>Mode</span>
+                <span class="status">PRACTICE</span>
+            </div>
+            <div class="history-item">
+                <span>Real Money</span>
+                <span class="status">DISABLED</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+</main>
 
-        let currentUserId = "default_user";
+<nav class="bottom-nav">
+    <button class="nav-item active" data-page="home"
+            onclick="showPage('home')">
+        <span>⌂</span>Home
+    </button>
+    <button class="nav-item" data-page="wallet"
+            onclick="showPage('wallet')">
+        <span>◈</span>Wallet
+    </button>
+    <button class="nav-item" data-page="history"
+            onclick="showPage('history')">
+        <span>▤</span>History
+    </button>
+    <button class="nav-item" data-page="profile"
+            onclick="showPage('profile')">
+        <span>♙</span>Profile
+    </button>
+    <button class="nav-item" data-page="games"
+            onclick="showPage('games')">
+        <span>🎮</span>Games
+    </button>
+</nav>
 
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const user = tg.initDataUnsafe.user;
-            currentUserId = user.id.toString();
+<footer>
+    ROYAL ARENA · DEMO BUILD
+</footer>
 
-            document.getElementById('username').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-            document.getElementById('userid').innerText = 'ID: ' + user.id;
-            document.getElementById('avatar-letter').innerText = user.first_name.charAt(0).toUpperCase();
-            document.getElementById('refer-link').value = `https://t.me/CashFree_CB_Bot?start=${user.id}`;
-        }
+<script>
+const STORAGE_KEY = "royal_arena_demo_v1";
 
-        let userBalanceKey = `balance_${currentUserId}`;
-        let userBalance = localStorage.getItem(userBalanceKey) !== null 
-                          ? parseFloat(localStorage.getItem(userBalanceKey)) 
-                          : 100.00;
+let state = {
+    balance: 0,
+    totalDeposits: 0,
+    totalWithdrawals: 0,
+    history: [],
+    profile: {
+        name: "",
+        email: ""
+    }
+};
 
-        updateUI();
+let currentGame = "dice";
 
-        if (userBalance > 0) {
-            document.getElementById('bonusModal').style.display = 'flex';
-        }
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
 
-        function updateUI() {
-            document.getElementById('header-balance').innerText = userBalance.toFixed(2);
-            document.getElementById('withdraw-balance').innerText = userBalance.toFixed(2);
-            
-            if (userBalance === 0) {
-                document.getElementById('total-withdrawn').innerText = "₹100.00";
-            } else {
-                document.getElementById('total-withdrawn').innerText = "₹0.00";
+            if (parsed && typeof parsed === "object") {
+                state = {
+                    ...state,
+                    ...parsed,
+                    profile: {
+                        ...state.profile,
+                        ...(parsed.profile || {})
+                    },
+                    history: Array.isArray(parsed.history)
+                        ? parsed.history
+                        : []
+                };
             }
         }
+    } catch (error) {
+        console.warn("Demo data could not be loaded.");
+    }
 
-        function closeModal() {
-            document.getElementById('bonusModal').style.display = 'none';
-        }
+    updateUI();
+}
 
-        /* Updates the Animated Line Progress when channels are joined */
-        function updateProgressBar() {
-            const joinedCount = document.querySelectorAll('.btn-join.joined').length;
-            document.getElementById('progress-text').innerText = `${joinedCount} / 10 Joined`;
-            document.getElementById('progress-fill').style.width = `${(joinedCount / 10) * 100}%`;
-        }
+function saveState() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+        alert("डेमो डेटा सेव नहीं हो पाया।");
+    }
+}
 
-        function handleJoinClick(btn, link) {
-            if (btn.classList.contains('joined') || btn.classList.contains('waiting')) return;
+function money(amount) {
+    return "₹" + Number(amount || 0).toFixed(2);
+}
 
-            window.open(link, '_blank');
+function showPage(page) {
+    if (page === "games") page = "home";
 
-            btn.classList.add('waiting');
-            let timeLeft = 5;
-            btn.innerText = `WAIT (${timeLeft}s)`;
+    document.querySelectorAll(".page").forEach(section => {
+        section.classList.remove("active");
+    });
 
-            let countdown = setInterval(() => {
-                timeLeft--;
-                if (timeLeft > 0) {
-                    btn.innerText = `WAIT (${timeLeft}s)`;
-                } else {
-                    clearInterval(countdown);
-                    btn.classList.remove('waiting');
-                    btn.classList.add('joined');
-                    btn.innerText = 'JOINED ✓';
-                    updateProgressBar();
-                }
-            }, 1000);
-        }
+    const selected = document.getElementById(page);
 
-        function switchTab(tabId, element) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(item => item.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            element.classList.add('active');
-        }
+    if (!selected) return;
 
-        /* VERIFY TASKS PAGE LOGIC */
-        function verifyTasks() {
-            const joinedCount = document.querySelectorAll('.btn-join.joined').length;
-            
-            if (joinedCount < 10) {
-                alert("⚠️ कृपया पहले ऊपर दिए गए सभी चैनल को जॉइन करें");
-            } else {
-                alert("⏳ कृपया पहले सभी चैनल में ज्वाइन होने की पुष्टि होने दें");
-            }
-            return false;
-        }
+    selected.classList.add("active");
 
-        /* WITHDRAW PAGE LOGIC WITH AUTO REDIRECT TO TASKS PAGE */
-        function processWithdraw() {
-            const joinedCount = document.querySelectorAll('.btn-join.joined').length;
+    document.querySelectorAll(".nav-item").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.page === page
+        );
+    });
 
-            if (joinedCount < 10) {
-                alert("⚠️ कृपया पहले सभी चैनल जॉइन करें");
-                // OK दबाते ही टास्क वाले मेन पेज पर ले जाएगा
-                switchTab('tasks-tab', document.getElementById('nav-tasks'));
-            } else {
-                alert("⏳ कृपया पहले सभी चैनल में ज्वाइन होने की पुष्टि होने दें");
-            }
+    if (page === "wallet") updateUI();
+    if (page === "history") renderHistory();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function updateUI() {
+    document.getElementById("home-balance").textContent =
+        money(state.balance);
+
+    document.getElementById("wallet-balance").textContent =
+        money(state.balance);
+
+    document.getElementById("total-deposits").textContent =
+        money(state.totalDeposits);
+
+    document.getElementById("total-withdrawals").textContent =
+        money(state.totalWithdrawals);
+
+    const name = state.profile.name.trim();
+
+    document.getElementById("header-avatar").textContent =
+        name ? name.charAt(0).toUpperCase() : "U";
+
+    document.getElementById("profile-name").value =
+        state.profile.name;
+
+    document.getElementById("profile-email").value =
+        state.profile.email;
+}
+
+function demoTransaction(type) {
+    let amount = 0;
+
+    if (type === "deposit") {
+        amount = Number(
+            document.getElementById("deposit-amount").value
+        );
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+            alert("सही रकम चुनें।");
             return;
         }
 
-        function copyReferLink() {
-            const copyText = document.getElementById("refer-link");
-            copyText.select();
-            document.execCommand("copy");
-            alert("📋 Refer Link Copied!");
+        state.balance += amount;
+        state.totalDeposits += amount;
+
+    } else if (type === "withdraw") {
+        amount = Number(
+            document.getElementById("withdraw-amount").value
+        );
+
+        const upi = document.getElementById("upi-id").value.trim();
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+            alert("निकासी की सही रकम दर्ज करें।");
+            return;
         }
-    </script>
+
+        if (!/^[\w.-]+@[\w.-]+$/.test(upi)) {
+            alert("डेमो के लिए सही फॉर्मेट में UPI ID लिखें।");
+            return;
+        }
+
+        if (amount > state.balance) {
+            alert("डेमो बैलेंस पर्याप्त नहीं है।");
+            return;
+        }
+
+        state.balance -= amount;
+        state.totalWithdrawals += amount;
+    } else {
+        return;
+    }
+
+    state.history.unshift({
+        id: "DEMO-" + Date.now(),
+        type,
+        amount,
+        status: "DEMO ONLY",
+        date: new Date().toLocaleString("hi-IN")
+    });
+
+    saveState();
+    updateUI();
+    renderHistory();
+
+    document.getElementById("withdraw-amount").value = "";
+
+    alert(
+        type === "deposit"
+            ? "डेमो डिपॉजिट दर्ज हो गया। कोई वास्तविक भुगतान नहीं हुआ।"
+            : "डेमो निकासी दर्ज हो गई। कोई वास्तविक पैसा नहीं भेजा गया।"
+    );
+}
+
+function renderHistory() {
+    const container = document.getElementById("history-list");
+    const filter = document.getElementById("history-filter").value;
+
+    const items = state.history.filter(item => {
+        return filter === "all" || item.type === filter;
+    });
+
+    if (items.length === 0) {
+        container.innerHTML =
+            '<div class="empty">इस श्रेणी में कोई रिकॉर्ड नहीं है।</div>';
+        return;
+    }
+
+    container.innerHTML = items.map(item => {
+        const isDeposit = item.type === "deposit";
+        const isWithdraw = item.type === "withdraw";
+
+        const title = isDeposit
+            ? "Demo Deposit"
+            : isWithdraw
+                ? "Demo Withdrawal"
+                : "Practice Game";
+
+        const sign = isDeposit ? "+" : isWithdraw ? "-" : "";
+
+        return `
+            <div class="history-item">
+                <div>
+                    <strong>${title}</strong>
+                    <small>${escapeHTML(item.date)}</small>
+                    <small>${escapeHTML(item.id)}</small>
+                </div>
+                <div style="text-align:right">
+                    <strong>${sign}${money(item.amount)}</strong>
+                    <small class="status">${escapeHTML(item.status)}</small>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function saveProfile() {
+    const name = document.getElementById("profile-name").value.trim();
+    const email = document.getElementById("profile-email").value.trim();
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("ईमेल का फॉर्मेट सही नहीं है।");
+        return;
+    }
+
+    state.profile = { name, email };
+
+    saveState();
+    updateUI();
+
+    alert("डेमो प्रोफाइल सेव हो गई। यह वास्तविक अकाउंट नहीं है।");
+}
+
+function openGame(game) {
+    currentGame = game;
+
+    const games = {
+        dice: {
+            title: "🎲 Ludo Dice",
+            subtitle: "पासा अभ्यास",
+            icon: "🎲"
+        },
+        carrom: {
+            title: "🪙 Carrom Arena",
+            subtitle: "कैरम अभ्यास",
+            icon: "🪙"
+        },
+        number: {
+            title: "🎯 Number Challenge",
+            subtitle: "नंबर अभ्यास",
+            icon: "🎯"
+        }
+    };
+
+    const selected = games[game] || games.dice;
+
+    document.getElementById("game-title").textContent =
+        selected.title;
+
+    document.getElementById("game-subtitle").textContent =
+        selected.subtitle;
+
+    document.getElementById("game-icon").textContent =
+        selected.icon;
+
+    document.getElementById("game-result").textContent =
+        "खेलने के लिए बटन दबाएँ।";
+
+    document.getElementById("play-button").textContent =
+        "PLAY ROUND";
+
+    showPage("game");
+}
+
+function playDemoGame() {
+    const result = document.getElementById("game-result");
+    const icon = document.getElementById("game-icon");
+
+    if (currentGame === "dice") {
+        const roll = Math.floor(Math.random() * 6) + 1;
+
+        const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+
+        icon.textContent = diceFaces[roll - 1];
+        result.textContent = "पासे का परिणाम: " + roll;
+
+    } else if (currentGame === "carrom") {
+        const shots = [
+            "अभ्यास शॉट: गोटी बाईं तरफ गई।",
+            "अभ्यास शॉट: गोटी पॉकेट के पास रुकी।",
+            "अभ्यास शॉट: गोटी पॉकेट में गई।",
+            "अभ्यास शॉट: शॉट दोबारा आजमाएँ।"
+        ];
+
+        result.textContent =
+            shots[Math.floor(Math.random() * shots.length)];
+
+    } else {
+        const number = Math.floor(Math.random() * 10) + 1;
+
+        result.textContent =
+            "डेमो नंबर: " + number;
+    }
+
+    state.history.unshift({
+        id: "GAME-" + Date.now(),
+        type: "game",
+        amount: 0,
+        status: "PRACTICE ONLY",
+        date: new Date().toLocaleString("hi-IN")
+    });
+
+    saveState();
+}
+
+loadState();
+</script>
+
 </body>
 </html>
